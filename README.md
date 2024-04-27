@@ -1,8 +1,8 @@
 # gotest
 
-### Install
+## Install
 
-#### Lazy
+### Lazy
 
 ```
 return {
