@@ -6,6 +6,8 @@ local ts = require("gotest.go.ts")
 
 local M = {}
 
+---@param ns integer
+---@param config object
 function M.go_test_nearest(ns, config)
 	vim.diagnostic.set(ns, 0, {}, {})
 

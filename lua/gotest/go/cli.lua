@@ -1,5 +1,8 @@
 local M = {}
 
+---@param cmd string|object
+---@param cb fun(output: object, exit_code: integer, timeout: integer)
+---@param config object
 function M.exec_cmd(cmd, cb, config)
 	config = config or {}
 
@@ -39,15 +42,20 @@ function M.exec_cmd(cmd, cb, config)
 	end
 
 	local timer = vim.loop.new_timer()
+	local timeout = config.timeout * 1000
 
-	timer:start(config.timeout, 0, function()
+	timer:start(timeout, 0, function()
 		vim.schedule(function()
 			vim.fn.jobstop(job_id)
-			timed_out = config.timeout
+			timed_out = timeout
 		end)
 	end)
 end
 
+---@param module string
+---@param func_names string[]
+---@param subtest_name string?
+---@return string[]
 function M.build_go_test_cmd(module, func_names, subtest_name)
 	local cmd = {
 		"go",

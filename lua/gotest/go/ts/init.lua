@@ -1,5 +1,5 @@
 local M = {
-  query_tbl_testcase_name = [[ ( literal_value (
+	query_tbl_testcase_name = [[ ( literal_value (
       literal_element (
         literal_value .(
           keyed_element
@@ -10,14 +10,14 @@ local M = {
     ))
   ]],
 
-  query_func_name = [[(function_declaration name: (identifier) @func_name)]],
+	query_func_name = [[(function_declaration name: (identifier) @func_name)]],
 
-  query_func_def_line_no = [[(
+	query_func_def_line_no = [[(
     function_declaration name: (identifier) @func_name
     (#eq? @func_name "%s")
   )]],
 
-  query_sub_testcase_name = [[ (call_expression
+	query_sub_testcase_name = [[ (call_expression
     (selector_expression
       (field_identifier) @method.name)
     (argument_list
@@ -27,162 +27,177 @@ local M = {
   ) @tc.run ]],
 }
 
+---@param bufnr integer?
+---@return TSNode?
 local function get_root_node(bufnr)
-  local parser = vim.treesitter.get_parser(bufnr, "go")
-  if not parser then
-    return
-  end
+	local parser = vim.treesitter.get_parser(bufnr, "go")
+	if not parser then
+		return
+	end
 
-  local tree = parser:parse()[1]
-  if not tree then
-    return
-  end
+	local tree = parser:parse()[1]
+	if not tree then
+		return
+	end
 
-  return tree:root()
+	return tree:root()
 end
 
+---@param bufnr integer?
+---@return string?
 function M.get_current_func_name(bufnr)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
-  local node = vim.treesitter.get_node()
-  if not node then
-    return
-  end
+	local node = vim.treesitter.get_node()
+	if not node then
+		return
+	end
 
-  while node do
-    if node:type() == "function_declaration" then
-      break
-    end
+	while node do
+		if node:type() == "function_declaration" then
+			break
+		end
 
-    node = node:parent()
-  end
+		node = node:parent()
+	end
 
-  if not node then
-    return
-  end
+	if not node then
+		return
+	end
 
-  return vim.treesitter.get_node_text(node:child(1), bufnr)
+	return vim.treesitter.get_node_text(node:child(1), bufnr)
 end
 
+---@param bufnr integer?
+---@return string[]
 function M.get_func_names(bufnr)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
-  local root = get_root_node(bufnr)
-  if not root then
-    return {}
-  end
+	local root = get_root_node(bufnr)
+	if not root then
+		return {}
+	end
 
-  local query = vim.treesitter.query.parse("go", M.query_func_name)
-  local out = {}
+	local query = vim.treesitter.query.parse("go", M.query_func_name)
+	local out = {}
 
-  for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
-    if query.captures[id] == "func_name" then
-      table.insert(out, vim.treesitter.get_node_text(node, 0))
-    end
-  end
+	for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
+		if query.captures[id] == "func_name" then
+			table.insert(out, vim.treesitter.get_node_text(node, 0))
+		end
+	end
 
-  return out
+	return out
 end
 
+---@param bufnr number?
+---@return string[]?
 function M.get_nearest_func_names(bufnr)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
-  local current_func_name = M.get_current_func_name(bufnr)
-  local func_names = { current_func_name }
+	local current_func_name = M.get_current_func_name(bufnr)
+	local func_names = { current_func_name }
 
-  if not current_func_name then
-    func_names = M.get_func_names(bufnr)
-  end
+	if not current_func_name then
+		func_names = M.get_func_names(bufnr)
+	end
 
-  func_names = vim.tbl_filter(function(v)
-    return vim.startswith(v, "Test")
-  end, func_names)
+	func_names = vim.tbl_filter(function(v)
+		return vim.startswith(v, "Test")
+	end, func_names)
 
-  if #func_names == 0 then
-    return
-  end
+	if #func_names == 0 then
+		return
+	end
 
-  return func_names
+	return func_names
 end
 
+---@param bufnr number?
+---@param name string
+---@return integer?
 function M.get_func_def_line_no(bufnr, name)
-  local find_func_by_name_query = string.format(M.query_func_def_line_no, name)
-  bufnr = bufnr or 0
+	local find_func_by_name_query = string.format(M.query_func_def_line_no, name)
+	bufnr = bufnr or 0
 
-  local root = get_root_node(bufnr)
-  if not root then
-    return
-  end
+	local root = get_root_node(bufnr)
+	if not root then
+		return
+	end
 
-  local query = vim.treesitter.query.parse("go", find_func_by_name_query)
+	local query = vim.treesitter.query.parse("go", find_func_by_name_query)
 
-  for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
-    if query.captures[id] == "func_name" then
-      local row, _, _ = node:start()
+	for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
+		if query.captures[id] == "func_name" then
+			local row, _, _ = node:start()
 
-      return row
-    end
-  end
+			return row
+		end
+	end
 end
 
+---@param bufnr integer?
+---@return string?
 function M.get_tbl_testcase_name(bufnr)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
-  local root = get_root_node(bufnr)
-  if not root then
-    return
-  end
+	local root = get_root_node(bufnr)
+	if not root then
+		return
+	end
 
-  local query = vim.treesitter.query.parse("go", M.query_tbl_testcase_name)
-  local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+	local query = vim.treesitter.query.parse("go", M.query_tbl_testcase_name)
+	local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
-  for _, match, _ in query:iter_matches(root, bufnr, 0, -1) do
-    local tc_name = nil
+	for _, match, _ in query:iter_matches(root, bufnr, 0, -1) do
+		local tc_name = nil
 
-    for id, node in pairs(match) do
-      local name = query.captures[id]
+		for id, node in pairs(match) do
+			local name = query.captures[id]
 
-      if name == "test.name" then
-        tc_name = vim.treesitter.get_node_text(node, bufnr)
-      end
+			if name == "test.name" then
+				tc_name = vim.treesitter.get_node_text(node, bufnr)
+			end
 
-      if name == "test.block" then
-        local start_row, _, end_row, _ = node:range()
-        if curr_row >= start_row and curr_row <= end_row then
-          return tc_name
-        end
-      end
-    end
-  end
+			if name == "test.block" then
+				local start_row, _, end_row, _ = node:range()
+				if curr_row >= start_row and curr_row <= end_row then
+					return tc_name
+				end
+			end
+		end
+	end
 
-  return nil
+	return nil
 end
 
+---@param bufnr integer?
+---@return string?
 function M.get_sub_testcase_name(bufnr)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
-  local root = get_root_node(bufnr)
-  if not root then
-    return
-  end
+	local root = get_root_node(bufnr)
+	if not root then
+		return
+	end
 
-  local query = vim.treesitter.query.parse("go", M.query_sub_testcase_name)
-  local is_inside_test = false
-  local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+	local query = vim.treesitter.query.parse("go", M.query_sub_testcase_name)
+	local is_inside_test = false
+	local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
-  for id, node in query:iter_captures(root, bufnr, 0, -1) do
-    local name = query.captures[id]
-    -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
-    if name == "tc.run" then
-      local start_row, _, end_row, _ = node:range()
+	for id, node in query:iter_captures(root, bufnr, 0, -1) do
+		local name = query.captures[id]
+		-- tc_run is the first capture of a match, so we can use it to check if we are inside a test
+		if name == "tc.run" then
+			local start_row, _, end_row, _ = node:range()
 
-      is_inside_test = curr_row >= start_row and curr_row <= end_row
-    elseif name == "tc.name" and is_inside_test then
-      return vim.treesitter.get_node_text(node, bufnr)
-    end
-  end
+			is_inside_test = curr_row >= start_row and curr_row <= end_row
+		elseif name == "tc.name" and is_inside_test then
+			return vim.treesitter.get_node_text(node, bufnr)
+		end
+	end
 
-  return nil
+	return nil
 end
 
 return M

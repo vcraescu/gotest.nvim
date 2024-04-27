@@ -9,17 +9,19 @@ local M = {
 				success = false,
 			},
 		},
-		timeout = 30000,
+		timeout = 30,
 		diagnostics = {
 			enabled = true,
 		},
 	},
 }
 
+---@param config object
 function M.go_test_nearest(config)
 	cmds.go_test_nearest(ns, config)
 end
 
+---@param opts object
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend("force", M.config, opts)
 

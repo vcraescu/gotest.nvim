@@ -4,8 +4,10 @@ local ts = require("gotest.go.ts")
 
 local M = {}
 
-local function show_diagnostics(bufnr, ns, results, opts)
-	opts = opts or {}
+---@param bufnr integer
+---@param ns integer
+---@param results object
+local function show_diagnostics(bufnr, ns, results)
 	local diagnostics = {}
 
 	for _, result in ipairs(results) do
@@ -28,8 +30,10 @@ local function show_diagnostics(bufnr, ns, results, opts)
 	vim.diagnostic.set(ns, bufnr, diagnostics, {})
 end
 
-local function show_output(bufnr, cmd, results, opts)
-	opts = opts or {}
+---@param bufnr integer
+---@param cmd string[]
+---@param results object
+local function show_output(bufnr, cmd, results)
 	bufnr = bufnr or 0
 
 	results = vim.tbl_filter(function(result)
@@ -56,9 +60,12 @@ local function show_output(bufnr, cmd, results, opts)
 	vim.cmd(string.format("copen | cnext %d", #qflist))
 end
 
+---@param bufnr integer
+---@param ns integer
+---@param cmd string[]
+---@param config object
+---@return fun(lines: string[], exit_code: integer, timeout: integer): nil
 function M.new(bufnr, ns, cmd, config)
-	config = config or {}
-
 	return function(lines, exit_code, timeout)
 		if timeout > 0 then
 			notify.warn(string.format("Tests TIMED OUT after %dms", timeout))
@@ -89,10 +96,10 @@ function M.new(bufnr, ns, cmd, config)
 		local windId = vim.api.nvim_get_current_win()
 
 		if config.diagnostics.enabled then
-			show_diagnostics(bufnr, ns, results, config)
+			show_diagnostics(bufnr, ns, results)
 		end
 
-		show_output(bufnr, cmd, results, config)
+		show_output(bufnr, cmd, results)
 
 		if tests_failed then
 			notify.warn("Tests FAILED")
