@@ -1,23 +1,31 @@
 local cmds = require("gotest.go.commands")
 local ns = vim.api.nvim_create_namespace("gotests")
 
-local M = {}
-local default_timeout = 30000
+local M = {
+	config = {
+		output = {
+			focus = {
+				fail = true,
+				success = false,
+			},
+		},
+		timeout = 30000,
+		diagnostics = {
+			enabled = true,
+		},
+	},
+}
 
-function M.go_test_nearest(opts)
-  cmds.go_test_nearest(ns, opts)
+function M.go_test_nearest(config)
+	cmds.go_test_nearest(ns, config)
 end
 
 function M.setup(opts)
-  opts = opts or {}
+	M.config = vim.tbl_deep_extend("force", M.config, opts)
 
-  if not opts.timeout or opts.timeout == 0 then
-    opts.timeout = default_timeout
-  end
-
-  vim.api.nvim_create_user_command("GoTestNearest", function()
-    return M.go_test_nearest(opts)
-  end, { force = true, desc = "Run the nearest go test" })
+	vim.api.nvim_create_user_command("GoTestNearest", function()
+		return M.go_test_nearest(M.config)
+	end, { force = true, desc = "Run the nearest go test" })
 end
 
 return M
