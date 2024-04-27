@@ -4,7 +4,7 @@
 
 ### Lazy
 
-```
+```lua
 return {
   "vcraescu/gotest.nvim",
   cmd = "GoTestNearest",
@@ -16,10 +16,16 @@ return {
             success = false, -- focus test results on success
         },
     },
-    timeout = 30000, -- test run timeout
+    timeout = 30000, -- test run timeout in milliseconds
     diagnostics = {
         enabled = true, -- show diagnostics
     },
   }
 }
+```
+
+### Commands
+
+```
+:GoTestNearest
 ```
