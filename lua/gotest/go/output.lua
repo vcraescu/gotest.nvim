@@ -113,7 +113,7 @@ function M.new(bufnr, ns, cmd, config)
 
 		notify.info("Tests PASSED")
 
-		if not config.output.focus.success then
+		if config.output.focus.success then
 			vim.api.nvim_set_current_win(windId)
 		end
 	end
