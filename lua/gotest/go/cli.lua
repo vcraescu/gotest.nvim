@@ -56,13 +56,19 @@ end
 ---@param func_names string[]
 ---@param subtest_name string?
 ---@return string[]
-function M.build_go_test_cmd(module, func_names, subtest_name)
+function M.build_go_test_cmd(module, func_names, subtest_name, config)
+	config = config or {}
+
 	local cmd = {
 		"go",
 		"test",
 		"-v",
 		"-json",
 	}
+
+	if config.disable_test_cache then
+		table.insert(cmd, "-count=1")
+	end
 
 	if module and module ~= "." then
 		table.insert(cmd, module)

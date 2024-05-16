@@ -10,6 +10,7 @@ local M = {
 			},
 		},
 		timeout = 30,
+		disable_test_cache = false,
 		diagnostics = {
 			enabled = true,
 		},

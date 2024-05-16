@@ -30,7 +30,7 @@ function M.go_test_nearest(ns, config)
 		end
 	end
 
-	local cmd = cli.build_go_test_cmd(util.get_current_module_path(), func_names, sub_testcase_name) or ""
+	local cmd = cli.build_go_test_cmd(util.get_current_module_path(), func_names, sub_testcase_name, config) or ""
 
 	notify.info("Tests running...")
 
