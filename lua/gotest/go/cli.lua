@@ -41,7 +41,7 @@ function M.exec_cmd(cmd, cb, config)
 		return
 	end
 
-	local timer = vim.loop.new_timer()
+	local timer = vim.uv.new_timer()
 	local timeout = config.timeout * 1000
 
 	timer:start(timeout, 0, function()
