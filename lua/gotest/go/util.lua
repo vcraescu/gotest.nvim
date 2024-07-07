@@ -26,13 +26,14 @@ function M.get_current_module_path()
 end
 
 ---@param list table
-function M.open_quickfix(list)
+---@param height number
+function M.open_quickfix(list, height)
 	vim.fn.setqflist(list, "r")
 
 	vim.cmd.copen()
 	vim.cmd.clast()
 	vim.cmd.wincmd("J")
-	vim.api.nvim_win_set_height(0, 15)
+	vim.api.nvim_win_set_height(0, height)
 	vim.wo.winfixheight = true
 end
 

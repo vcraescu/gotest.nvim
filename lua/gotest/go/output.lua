@@ -32,8 +32,9 @@ end
 
 ---@param bufnr integer
 ---@param cmd string[]
----@param results table
-local function show_output(bufnr, cmd, results)
+---@param results {Action: string, Output: string}[]
+---@param config table
+local function show_output(bufnr, cmd, results, config)
 	bufnr = bufnr or 0
 
 	results = vim.tbl_filter(function(result)
@@ -56,7 +57,7 @@ local function show_output(bufnr, cmd, results)
 		table.insert(qflist, value)
 	end
 
-	util.open_quickfix(qflist)
+	util.open_quickfix(qflist, config.output.height)
 end
 
 ---@param bufnr integer
@@ -98,7 +99,7 @@ function M.new(bufnr, ns, cmd, config)
 			show_diagnostics(bufnr, ns, results)
 		end
 
-		show_output(bufnr, cmd, results)
+		show_output(bufnr, cmd, results, config)
 
 		if tests_failed then
 			notify.warn("Tests FAILED")
