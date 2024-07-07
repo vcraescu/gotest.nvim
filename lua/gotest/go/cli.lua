@@ -1,8 +1,8 @@
 local M = {}
 
----@param cmd string|object
----@param cb fun(output: object, exit_code: integer, timeout: integer)
----@param config object
+---@param cmd string|table
+---@param cb fun(output: table, exit_code: integer, timeout: integer)
+---@param config table
 function M.exec_cmd(cmd, cb, config)
 	config = config or {}
 

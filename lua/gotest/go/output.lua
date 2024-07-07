@@ -6,7 +6,7 @@ local M = {}
 
 ---@param bufnr integer
 ---@param ns integer
----@param results object
+---@param results table
 local function show_diagnostics(bufnr, ns, results)
 	local diagnostics = {}
 
@@ -32,7 +32,7 @@ end
 
 ---@param bufnr integer
 ---@param cmd string[]
----@param results object
+---@param results table
 local function show_output(bufnr, cmd, results)
 	bufnr = bufnr or 0
 
@@ -56,14 +56,13 @@ local function show_output(bufnr, cmd, results)
 		table.insert(qflist, value)
 	end
 
-	vim.fn.setqflist(qflist, "r")
-	vim.cmd(string.format("copen | cnext %d", #qflist))
+	util.open_quickfix(qflist)
 end
 
 ---@param bufnr integer
 ---@param ns integer
 ---@param cmd string[]
----@param config object
+---@param config table
 ---@return fun(lines: string[], exit_code: integer, timeout: integer): nil
 function M.new(bufnr, ns, cmd, config)
 	return function(lines, exit_code, timeout)
