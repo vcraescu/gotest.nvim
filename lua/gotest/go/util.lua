@@ -6,7 +6,7 @@ function M.is_test_file()
 end
 
 ---@param lines string[]
----@return object[]
+---@return table[]
 function M.json_decode_tests(lines)
 	return vim.tbl_map(function(line)
 		return vim.fn.json_decode(line)
@@ -23,6 +23,17 @@ function M.get_current_module_path()
 	end
 
 	return "./" .. relative_path
+end
+
+---@param list table
+function M.open_quickfix(list)
+	vim.fn.setqflist(list, "r")
+
+	vim.cmd.copen()
+	vim.cmd.clast()
+	vim.cmd.wincmd("J")
+	vim.api.nvim_win_set_height(0, 15)
+	vim.wo.winfixheight = true
 end
 
 return M
