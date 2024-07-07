@@ -12,27 +12,25 @@ return {
 }
 ```
 
-### Default config
+## Default config
 ```lua
 {
-	config = {
-		output = {
-			focus = {
-				fail = true, -- focus test results on fail
-				success = false, -- focus test results on success
-			},
-            height = 15, -- height of the quickfix pane
-		},
-		timeout = 30, -- test run timeout in seconds
-		disable_test_cache = false, -- disable go test cache
-		diagnostics = {
-			enabled = true, -- show diagnostics
-		},
-	},
+  output = {
+     focus = {
+       fail = true, -- focus test results on fail
+       success = false, -- focus test results on success
+     },
+     height = 15, -- height of the quickfix pane
+  },
+  timeout = 30, -- test run timeout in seconds
+  disable_test_cache = false, -- disable go test cache
+  diagnostics = {
+     enabled = true, -- show diagnostics
+  },
 }
 ```
 
-### Commands
+## Commands
 
 ```
 :GoTestNearest
