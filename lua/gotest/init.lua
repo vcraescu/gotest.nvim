@@ -8,6 +8,7 @@ local M = {
 				fail = true,
 				success = false,
 			},
+			height = 15,
 		},
 		timeout = 30,
 		disable_test_cache = false,
