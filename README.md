@@ -21,6 +21,10 @@ return {
        success = false, -- focus test results on success
      },
      height = 15, -- height of the quickfix pane
+     show = {
+       fail = true,
+       success = true,
+     },
   },
   timeout = 30, -- test run timeout in seconds
   disable_test_cache = false, -- disable go test cache

@@ -1,28 +1,25 @@
+local Util = require("gotest.util")
+
 local M = {}
 
----@param cmd string|table
----@param cb fun(output: table, exit_code: integer, timeout: integer)
----@param config table
-function M.exec_cmd(cmd, cb, config)
-	config = config or {}
+---@param cmd string|string[]
+---@param cb fun(output: gotest.GoTestOutputLine[], exit_code: integer, timeout: integer)
+---@param opts gotest.Config
+---@return integer
+function M.exec_cmd(cmd, cb, opts)
+	opts = opts or {}
 
 	local timed_out = 0
-	local std_output = {}
-	local err_output = {}
-	local strip_empty_lines = function(lines)
-		return vim.tbl_filter(function(line)
-			return line ~= ""
-		end, lines)
-	end
+	local std_output, err_output = {}, {}
 
-	local job_id = vim.fn.jobstart(cmd, {
+	return vim.fn.jobstart(cmd, {
 		stdout_buffered = true,
 		stderr_buffered = true,
 		on_stdout = function(_, lines)
-			std_output = strip_empty_lines(lines)
+			std_output = Util.strip_empty_lines(lines)
 		end,
 		on_stderr = function(_, lines)
-			err_output = strip_empty_lines(lines)
+			err_output = Util.strip_empty_lines(lines)
 		end,
 		on_exit = function(_, exit_code)
 			vim.schedule(function()
@@ -36,28 +33,15 @@ function M.exec_cmd(cmd, cb, config)
 			end)
 		end,
 	})
-
-	if job_id <= 0 then
-		return
-	end
-
-	local timer = vim.uv.new_timer()
-	local timeout = config.timeout * 1000
-
-	timer:start(timeout, 0, function()
-		vim.schedule(function()
-			vim.fn.jobstop(job_id)
-			timed_out = timeout
-		end)
-	end)
 end
 
 ---@param module string
 ---@param func_names string[]
 ---@param subtest_name string?
+---@param opts gotest.Config
 ---@return string[]
-function M.build_go_test_cmd(module, func_names, subtest_name, config)
-	config = config or {}
+function M.build_go_test_cmd(module, func_names, subtest_name, opts)
+	opts = opts or {}
 
 	local cmd = {
 		"go",
@@ -66,8 +50,12 @@ function M.build_go_test_cmd(module, func_names, subtest_name, config)
 		"-json",
 	}
 
-	if config.disable_test_cache then
+	if opts.disable_test_cache then
 		table.insert(cmd, "-count=1")
+	end
+
+	if opts.timeout > 0 then
+		table.insert(cmd, string.format("-timeout=%ds", opts.timeout))
 	end
 
 	if module and module ~= "." then

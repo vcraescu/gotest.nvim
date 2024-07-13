@@ -1,35 +1,19 @@
-local cmds = require("gotest.go.commands")
-local ns = vim.api.nvim_create_namespace("gotests")
+local Config = require("gotest.config")
+local Api = require("gotest.api")
 
-local M = {
-	config = {
-		output = {
-			focus = {
-				fail = true,
-				success = false,
-			},
-			height = 15,
-		},
-		timeout = 30,
-		disable_test_cache = false,
-		diagnostics = {
-			enabled = true,
-		},
-	},
-}
+local M = {}
 
----@param config table
-function M.go_test_nearest(config)
-	cmds.go_test_nearest(ns, config)
-end
-
----@param opts table
+---@param opts? gotest.Config
 function M.setup(opts)
-	M.config = vim.tbl_deep_extend("force", M.config, opts)
+	opts = Config.setup(opts)
 
 	vim.api.nvim_create_user_command("GoTestNearest", function()
-		return M.go_test_nearest(M.config)
+		return Api.go_test_nearest(0, opts)
 	end, { force = true, desc = "Run the nearest go test" })
 end
 
-return M
+return setmetatable(M, {
+	__index = function(_, key)
+		return Api[key]
+	end,
+})
