@@ -37,4 +37,10 @@ function M.open_quickfix(list, height)
 	vim.wo.winfixheight = true
 end
 
+function M.strip_empty_lines(lines)
+	return vim.tbl_filter(function(line)
+		return line ~= ""
+	end, lines)
+end
+
 return M
