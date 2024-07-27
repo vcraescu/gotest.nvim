@@ -5,33 +5,46 @@ local Diagnostics = require("gotest.diagnostics")
 local M = {}
 
 ---@param bufnr integer
+---@param lines string[]
+local function set_output_highlights(bufnr, lines)
+  vim.api.nvim_buf_clear_namespace(bufnr, 0, 0, -1)
+  vim.api.nvim_buf_add_highlight(bufnr, 0, "Comment", 0, 0, -1)
+
+  for i, line in ipairs(lines) do
+    if string.find(line, "=== CONT") or string.find(line, "=== RUN") or string.find(line, "=== PAUSE") then
+      vim.api.nvim_buf_add_highlight(bufnr, 0, "Comment", i - 1, 0, -1)
+    elseif string.find(line, "--- PASS") then
+      vim.api.nvim_buf_add_highlight(bufnr, 0, "DiagnosticHint", i - 1, 0, -1)
+    elseif string.find(line, "--- FAIL") then
+      vim.api.nvim_buf_add_highlight(bufnr, 0, "DiagnosticError", i - 1, 0, -1)
+    elseif string.find(line, "--- SKIP") then
+      vim.api.nvim_buf_add_highlight(bufnr, 0, "DiagnosticWarn", i - 1, 0, -1)
+    elseif string.match(line, ".*.go:%d+:$") then
+      vim.api.nvim_buf_add_highlight(bufnr, 0, "DiagnosticInfo", i - 1, 0, -1)
+    end
+  end
+end
+
 ---@param cmd string[]
 ---@param results gotest.GoTestOutputLine[]
 ---@param opts gotest.Config
-local function show_output(bufnr, cmd, results, opts)
-  bufnr = bufnr or 0
-
+local function show_output(cmd, results, opts)
   results = vim.tbl_filter(function(result)
     return result.Action == "output"
   end, results)
 
-  results = vim.tbl_map(function(result)
-    return {
-      bufnr = bufnr,
-      text = result.Output,
-    }
+  local lines = vim.tbl_map(function(result)
+    local s, _ = string.gsub(result.Output, "%s+$", "")
+
+    return s
   end, results)
 
-  local qflist = { {
-    bufnr = bufnr,
-    text = vim.fn.join(cmd, " "),
-  }, { bufnr = bufnr } }
+  table.insert(lines, 1, vim.fn.join(cmd, " "))
+  table.insert(lines, 2, "")
 
-  for _, value in ipairs(results) do
-    table.insert(qflist, value)
-  end
+  local bufnr = Util.open_bottom_buf(lines, opts.output.height)
 
-  Util.open_quickfix(qflist, opts.output.height)
+  set_output_highlights(bufnr, lines)
 end
 
 ---@param bufnr integer
@@ -77,7 +90,7 @@ function M.new(bufnr, cmd, opts)
       Notify.warn("Tests FAILED")
 
       if opts.output.show.fail then
-        show_output(bufnr, cmd, results, opts)
+        show_output(cmd, results, opts)
 
         if not opts.output.focus.fail then
           vim.api.nvim_set_current_win(windId)
@@ -90,7 +103,7 @@ function M.new(bufnr, cmd, opts)
     Notify.info("Tests PASSED")
 
     if opts.output.show.success then
-      show_output(bufnr, cmd, results, opts)
+      show_output(cmd, results, opts)
 
       if not opts.output.focus.success then
         vim.api.nvim_set_current_win(windId)

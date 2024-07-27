@@ -25,16 +25,33 @@ function M.get_current_module_path()
   return "./" .. relative_path
 end
 
----@param list table
+---@param lines string[]
 ---@param height number
-function M.open_quickfix(list, height)
-  vim.fn.setqflist(list, "r")
+function M.open_bottom_buf(lines, height)
+  local buf_name = "gotest_output"
+  local bufnr = vim.fn.bufnr(buf_name)
+  local bufnrs = vim.fn.win_findbuf(bufnr)
 
-  vim.cmd.copen()
-  vim.cmd.clast()
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, height)
-  vim.wo.winfixheight = true
+  if #bufnrs > 0 or bufnr ~= -1 then
+    vim.api.nvim_buf_delete(bufnr, { force = true })
+  end
+
+  bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_name(bufnr, buf_name)
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = bufnr })
+
+  vim.api.nvim_command("botright split")
+
+  local new_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(new_win, bufnr)
+  vim.api.nvim_win_set_height(new_win, height)
+
+  -- Scroll to the bottom of the buffer
+  local last_line = vim.api.nvim_buf_line_count(bufnr)
+  vim.api.nvim_win_set_cursor(new_win, { last_line, 0 })
+
+  return bufnr
 end
 
 function M.strip_empty_lines(lines)
