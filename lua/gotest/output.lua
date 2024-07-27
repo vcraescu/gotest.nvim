@@ -29,18 +29,17 @@ end
 ---@param results gotest.GoTestOutputLine[]
 ---@param opts gotest.Config
 local function show_output(cmd, results, opts)
-  results = vim.tbl_filter(function(result)
-    return result.Action == "output"
-  end, results)
+  local lines = {
+    vim.fn.join(cmd, " "),
+    "",
+  }
 
-  local lines = vim.tbl_map(function(result)
-    local s, _ = string.gsub(result.Output, "%s+$", "")
-
-    return s
-  end, results)
-
-  table.insert(lines, 1, vim.fn.join(cmd, " "))
-  table.insert(lines, 2, "")
+  for _, result in ipairs(results) do
+    if result.Output then
+      local line, _ = string.gsub(result.Output, "%s+$", "")
+      table.insert(lines, line)
+    end
+  end
 
   local bufnr = Util.open_bottom_buf(lines, opts.output.height)
 
@@ -69,14 +68,6 @@ function M.new(bufnr, cmd, opts)
           Output = line,
         }
       end, lines)
-    end
-
-    local output = {}
-
-    for _, result in ipairs(results) do
-      if result.Action == "output" then
-        table.insert(output, result.Output)
-      end
     end
 
     local windId = vim.api.nvim_get_current_win()
