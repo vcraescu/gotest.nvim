@@ -1,11 +1,14 @@
 local Config = require("gotest.config")
 local Ts = require("gotest.ts")
 
+---@class gotest.Diagnostics
 local M = {}
 
 ---@param bufnr integer
----@param results gotest.GoTestOutputLine[]
+---@param results gotest.CliOutputLine[]
 function M.show(bufnr, results)
+  bufnr = bufnr or 0
+  results = results or {}
   local diagnostics = {}
 
   for _, result in ipairs(results) do
@@ -30,6 +33,8 @@ end
 
 ---@param bufnr integer
 function M.clear(bufnr)
+  bufnr = bufnr or 0
+
   vim.diagnostic.set(Config._ns, bufnr, {}, {})
 end
 

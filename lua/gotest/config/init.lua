@@ -2,6 +2,7 @@ local M = {}
 
 ---@class gotest.Config
 local defaults = {
+  ---@class gotest.Config.output
   output = {
     focus = {
       fail = true,
