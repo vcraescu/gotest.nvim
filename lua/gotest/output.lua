@@ -78,7 +78,7 @@ function M.new(bufnr, cmd, opts)
     end
 
     if tests_failed then
-      Notify.warn("Tests FAILED")
+      Notify.error("Tests FAILED")
 
       if opts.output.show.fail then
         show_output(cmd, results, opts)
