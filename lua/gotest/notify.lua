@@ -14,6 +14,11 @@ function M.warn(msg)
 end
 
 ---@param msg string
+function M.error(msg)
+  notify(msg, vim.log.levels.ERROR)
+end
+
+---@param msg string
 function M.info(msg)
   notify(msg, vim.log.levels.INFO)
 end
