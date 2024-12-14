@@ -23,7 +23,11 @@ function M.create_win(bufnr, height)
 
   vim.api.nvim_win_set_buf(0, bufnr)
   vim.api.nvim_win_set_height(0, height)
-  vim.api.nvim_set_current_win(current_win)
+
+  -- we need to schedule this operation otherwise it will fail because of BufEnter autocmd from nvim-lint
+  vim.schedule(function()
+    vim.api.nvim_set_current_win(current_win)
+  end)
 
   return win
 end
