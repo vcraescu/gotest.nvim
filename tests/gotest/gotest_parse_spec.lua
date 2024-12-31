@@ -16,7 +16,7 @@ end
 describe("test output parse", function()
   it("should return an error if nil is passed", function()
     assert.is.error(function()
-      ---@diagnostic disable-next-line: param-type-mismatch
+      --- @diagnostic disable-next-line: param-type-mismatch
       parse(nil)
     end)
   end)
@@ -35,7 +35,7 @@ describe("test output parse", function()
     end)
   end)
 
-  it("should parse test output from go test ./module/name", function()
+  it("should parse test output from 'go test ./module/name'", function()
     local lines = utils.load_fixture("/gotest_parse/single_file_output.json")
     local actual = parse(lines)
     local expected = vim.fn.json_decode([[
@@ -96,7 +96,7 @@ describe("test output parse", function()
     assert.are.same(expected, actual)
   end)
 
-  it("should parse test output from go test ./...", function()
+  it("should parse test output from 'go test ./...'", function()
     local lines = utils.load_fixture("/gotest_parse/multiple_packages_output.json")
     local actual = parse(lines)
     local expected = vim.fn.json_decode([[

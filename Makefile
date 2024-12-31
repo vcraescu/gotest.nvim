@@ -1,12 +1,14 @@
 .PHONY: fmt lint test
 
 fmt:
-	echo "formatting"
-	stylua lua/ 
+	@echo "Formatting..."
+	stylua lua/ tests/gotest/*.lua
+	@echo
 
 lint:
-	echo "linting"
-	luacheck lua/ --globals vim
+	@echo "Linting..."
+	luacheck lua/ tests/gotest/*.lua --globals vim
+	@echo
 
 test:
 	@echo "Run tests..."
