@@ -6,18 +6,14 @@
 
 --- @param lines string[]
 --- @return TestJSON[]
---- @return string? error
 local function json_decode_lines(lines)
+  assert(lines, "Expected non-nil lines")
+
   --- @type TestJSON[]
   local output = {}
 
-  for i, line in ipairs(lines) do
-    local ok, decoded_line = pcall(vim.fn.json_decode, line)
-    if not ok then
-      return {}, lines[i]
-    end
-
-    table.insert(output, decoded_line)
+  for _, line in ipairs(lines) do
+    table.insert(output, vim.fn.json_decode(line))
   end
 
   return output
@@ -25,17 +21,12 @@ end
 
 --- @param lines TestJSON[]
 --- @return table
---- @return string? error
 local function parse(lines)
+  assert(lines, "Expected non-nil lines")
+
   local tests = {}
-  local err, decoded_lines
 
-  decoded_lines, err = json_decode_lines(lines)
-  if err then
-    return {}, err
-  end
-
-  for _, line in ipairs(decoded_lines) do
+  for _, line in ipairs(json_decode_lines(lines)) do
     if line.Test then
       tests[line.Package] = tests[line.Package] or {}
       tests[line.Package][line.Test] = tests[line.Package][line.Test] or { output = {} }
@@ -57,13 +48,17 @@ local function parse(lines)
     end
   end
 
-  return tests, nil
+  return tests
 end
 
 --- @param tests table
 --- @param module_name string
 --- @param test_name string
 local function get_test_parent(tests, module_name, test_name)
+  assert(tests, "Expected non-nil tests")
+  assert(module_name, "Expected non-nil module_name")
+  assert(test_name, "Expected non-nil test_name")
+
   for test in pairs(tests[module_name] or {}) do
     if vim.startswith(test_name, test .. "/") then
       return test
@@ -77,6 +72,9 @@ end
 --- @param parent string
 --- @return string
 local function get_test_real_name(test_name, parent)
+  assert(test_name, "Expected non-nil test_name")
+  assert(parent, "Expected non-nil parent")
+
   test_name = string.gsub(test_name, parent .. "/", "")
   test_name = string.gsub(test_name, "_", " ")
 
@@ -98,6 +96,9 @@ local function parse_failed_output(lines)
 
   if file_and_lineno then
     file, lineno = unpack(vim.fn.split(file_and_lineno, ":"))
+    assert(file, "Expected non-nil file")
+    assert(lineno, "Expected non-nil lineno")
+
     file = vim.trim(file)
     lineno = tonumber(vim.trim(lineno), 10)
   end
@@ -108,7 +109,7 @@ local function parse_failed_output(lines)
 end
 
 --- @class Test
---- @field module string
+--- @field module string?
 --- @field name string
 --- @field failed boolean?
 --- @field parent string?
@@ -123,12 +124,15 @@ end
 --- @param test Test
 local function new_test(tests, module_name, test_name, test)
   test = {
-    module = module_name,
     name = test_name,
     failed = test.failed or nil,
     parent = get_test_parent(tests, module_name, test_name),
     output = test.output,
   }
+
+  if module_name ~= "command-line-arguments" then
+    test.module = module_name
+  end
 
   if test.parent then
     test.real_name = get_test_real_name(test.name, test.parent)
