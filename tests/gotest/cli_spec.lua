@@ -1,4 +1,7 @@
 local cli = require("gotest.new_cli")
+local utils = require("tests.gotest.utils")
+
+utils.setup_test()
 
 describe("gotest cli", function()
   describe("build_gotest_cmd", function()

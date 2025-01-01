@@ -1,6 +1,8 @@
 local parse = require("gotest.gotest_parse")
 local utils = require("tests.gotest.utils")
 
+utils.setup_test()
+
 local function sort_tests(tests)
   return vim.fn.sort(tests, function(a, b)
     if a.name < b.name then
