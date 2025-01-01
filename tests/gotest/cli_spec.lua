@@ -133,4 +133,151 @@ describe("gotest cli", function()
       end)
     end)
   end)
+
+  describe("exec_cmd", function()
+    it("should return the error output", function()
+      local cmd = { "go", "test" }
+      local actual, exit_code = cli.exec_cmd(cmd)
+      local expected = {
+        "\tto create a module there, run:",
+        "\tgo mod init",
+      }
+
+      assert.is.equals(1, exit_code)
+      assert.is.same(expected[1], actual[2])
+      assert.is.same(expected[2], actual[3])
+    end)
+
+    it("should return the output", function()
+      local cmd = { "go", "test", "-v", "-json", "./...", "-run=TestSum" }
+      local actual, actual_exit_code = cli.exec_cmd(cmd, "./tests/gotest/fixtures/cli")
+      local expected = vim.fn.json_decode([[
+        [
+          {
+            "Time": "2025-01-01T11:12:14.387499+02:00",
+            "Action": "start",
+            "Package": "cli"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.5859+02:00",
+            "Action": "run",
+            "Package": "cli",
+            "Test": "TestSum"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.58605+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum",
+            "Output": "=== RUN   TestSum\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586084+02:00",
+            "Action": "run",
+            "Package": "cli",
+            "Test": "TestSum/success"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586093+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum/success",
+            "Output": "=== RUN   TestSum/success\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586111+02:00",
+            "Action": "run",
+            "Package": "cli",
+            "Test": "TestSum/fail"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586128+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum/fail",
+            "Output": "=== RUN   TestSum/fail\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586134+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum/fail",
+            "Output": "    sum_test.go:31: sum() = 10, want 20\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586165+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum",
+            "Output": "--- FAIL: TestSum (0.00s)\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586175+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum/success",
+            "Output": "    --- PASS: TestSum/success (0.00s)\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586186+02:00",
+            "Action": "pass",
+            "Package": "cli",
+            "Test": "TestSum/success",
+            "Elapsed": 0
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586199+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Test": "TestSum/fail",
+            "Output": "    --- FAIL: TestSum/fail (0.00s)\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586203+02:00",
+            "Action": "fail",
+            "Package": "cli",
+            "Test": "TestSum/fail",
+            "Elapsed": 0
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586208+02:00",
+            "Action": "fail",
+            "Package": "cli",
+            "Test": "TestSum",
+            "Elapsed": 0
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586211+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Output": "FAIL\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586779+02:00",
+            "Action": "output",
+            "Package": "cli",
+            "Output": "FAIL\tcli\t0.199s\n"
+          },
+          {
+            "Time": "2025-01-01T11:12:14.586813+02:00",
+            "Action": "fail",
+            "Package": "cli",
+            "Elapsed": 0.199
+          }
+        ]
+      ]])
+
+      assert.is.equals(1, actual_exit_code)
+      assert.is.truthy(#actual > 0)
+
+      for index, actual_line in ipairs(actual) do
+        local a = vim.fn.json_decode(actual_line)
+        local e = expected[index]
+
+        assert.is.equals(e.Action, a.Action)
+        assert.is.equals(e.Package, a.Package)
+        assert.is.equals(e.Test, a.Test)
+      end
+    end)
+  end)
 end)

@@ -68,4 +68,45 @@ function M.build_gotest_cmd(path, test_name, subtest_name, opts)
   return output
 end
 
+---@param cmd string[]
+---@param cwd? string
+---@return string[]
+---@return integer exit_code
+function M.exec_cmd(cmd, cwd)
+  local std_output, err_output = {}, {}
+  local exit_code
+
+  local capture_output = function(dst)
+    return function(_, lines)
+      lines = vim.tbl_filter(function(line)
+        return line ~= ""
+      end, lines)
+
+      vim.list_extend(dst, lines)
+    end
+  end
+
+  local job_id = vim.fn.jobstart(cmd, {
+    cwd = cwd,
+    stdout_buffered = true,
+    stderr_buffered = true,
+    on_stdout = capture_output(std_output),
+    on_stderr = capture_output(err_output),
+    on_exit = function(_, code)
+      exit_code = code
+    end,
+  })
+
+  assert(job_id, "Expected non-nil job_id")
+  _ = vim.fn.jobwait({ job_id })
+
+  local output = std_output
+
+  if #err_output > 0 then
+    output = err_output
+  end
+
+  return output, exit_code
+end
+
 return M
