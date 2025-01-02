@@ -27,6 +27,7 @@ local query_sub_test_name = [[
       (#eq? @method.name "Run")
     ) @tc.run 
   ]]
+local query_func_name = [[(function_declaration name: (identifier) @func_name)]]
 
 ---@param bufnr integer?
 ---@return TSNode?
@@ -46,8 +47,8 @@ end
 
 ---@param bufnr integer?
 ---@return string?
-function M.get_current_func_name(bufnr)
-  assert(bufnr and bufnr > 0, "bufnr must be a valid buffer number")
+function M.get_current_test_func_name(bufnr)
+  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
 
   local node = vim.treesitter.get_node()
   if not node then
@@ -66,14 +67,19 @@ function M.get_current_func_name(bufnr)
     return
   end
 
-  return vim.treesitter.get_node_text(node:child(1), bufnr)
+  local func_name = vim.treesitter.get_node_text(node:child(1), bufnr)
+  if vim.startswith(func_name, "Test") then
+    return func_name
+  end
+
+  return nil
 end
 
 ---@param bufnr number?
 ---@param name string
 ---@return integer?
 function M.get_func_def_line_no(bufnr, name)
-  assert(bufnr and bufnr > 0, "bufnr must be a valid buffer number")
+  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
   assert(name, "name must be a string")
 
   local find_func_by_name_query = string.format(query_func_def_line_no, name)
@@ -98,7 +104,7 @@ end
 ---@param bufnr integer
 ---@return string?
 function M.get_current_table_test_name(bufnr)
-  assert(bufnr and bufnr > 0, "bufnr must be a valid buffer number")
+  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
 
   local root = get_root_node(bufnr)
   if not root then
@@ -133,7 +139,7 @@ end
 ---@param bufnr integer?
 ---@return string?
 function M.get_current_sub_test_name(bufnr)
-  assert(bufnr and bufnr > 0, "bufnr must be a valid buffer number")
+  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
 
   local root = get_root_node(bufnr)
   if not root then
@@ -159,24 +165,33 @@ function M.get_current_sub_test_name(bufnr)
   return nil
 end
 
----@param bufnr integer
----@return string?, string? test name and table test name or sub test name
-function M.get_current_test(bufnr)
-  assert(bufnr and bufnr > 0, "bufnr must be a valid buffer number")
+---@param bufnr integer?
+---@return string[]?
+function M.get_test_func_names(bufnr)
+  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
 
-  local test_name = M.get_current_func_name(bufnr)
-  if not test_name then
+  local root = get_root_node(bufnr)
+  if not root then
     return nil
   end
 
-  local table_test_name = M.get_current_table_test_name(bufnr)
-  if table_test_name then
-    return test_name, table_test_name
+  local query = vim.treesitter.query.parse("go", query_func_name)
+  local output = {}
+
+  for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
+    if query.captures[id] == "func_name" then
+      local func_name = vim.treesitter.get_node_text(node, 0)
+      if vim.startswith(func_name, "Test") then
+        table.insert(output, vim.treesitter.get_node_text(node, 0))
+      end
+    end
   end
 
-  local sub_test_name = M.get_current_sub_test_name(bufnr)
+  if #output == 0 then
+    return nil
+  end
 
-  return test_name, sub_test_name
+  return output
 end
 
 return M

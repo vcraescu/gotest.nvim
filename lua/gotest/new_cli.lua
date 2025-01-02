@@ -5,23 +5,18 @@
 local M = {}
 
 ---@param path string?
----@param test_name string?
+---@param test_names string[]?
 ---@param subtest_name string?
 ---@param opts? Opts
 ---@return string[]
-function M.build_gotest_cmd(path, test_name, subtest_name, opts)
+function M.build_gotest_cmd(path, test_names, subtest_name, opts)
   opts = opts or {}
 
   path = path and vim.fn.trim(path)
-  test_name = test_name and vim.fn.trim(test_name)
   subtest_name = subtest_name and vim.fn.trim(subtest_name)
 
   if path == "" then
     path = nil
-  end
-
-  if test_name == "" then
-    test_name = nil
   end
 
   if subtest_name == "" then
@@ -29,10 +24,10 @@ function M.build_gotest_cmd(path, test_name, subtest_name, opts)
   end
 
   if subtest_name then
-    assert(test_name, "Expected non-nil test_name")
+    assert(test_names and #test_names == 1, "Expected non-nil test_names")
   end
 
-  assert(path or test_name, "Expected non-nil path or test_name")
+  assert(path or test_names and #test_names == 1, "Expected non-nil path or test_names")
 
   local output = {
     "go",
@@ -53,10 +48,14 @@ function M.build_gotest_cmd(path, test_name, subtest_name, opts)
     table.insert(output, path)
   end
 
-  if test_name then
+  if test_names and #test_names >= 1 then
     local run_arg = {}
 
-    table.insert(run_arg, string.format([[^\Q%s\E$]], test_name))
+    test_names = vim.tbl_map(function(test_name)
+      return string.format([[^\Q%s\E$]], test_name)
+    end, test_names)
+
+    table.insert(run_arg, vim.fn.join(test_names, "|"))
 
     if subtest_name then
       table.insert(run_arg, string.format([[^\Q%s\E$]], subtest_name))

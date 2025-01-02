@@ -1,15 +1,15 @@
---- @class TestJSON
+--- @class gotest.TestJSON
 --- @field Action string
 --- @field Package string
 --- @field Test string
 --- @field Output string
 
 --- @param lines string[]
---- @return TestJSON[]
+--- @return gotest.TestJSON[]
 local function json_decode_lines(lines)
   assert(lines, "Expected non-nil lines")
 
-  --- @type TestJSON[]
+  --- @type gotest.TestJSON[]
   local output = {}
 
   for _, line in ipairs(lines) do
@@ -19,7 +19,7 @@ local function json_decode_lines(lines)
   return output
 end
 
---- @param lines TestJSON[]
+--- @param lines gotest.TestJSON[]
 --- @return table
 local function parse(lines)
   assert(lines, "Expected non-nil lines")
@@ -42,7 +42,7 @@ local function parse(lines)
           and not vim.startswith(output, "--- FAIL")
           and not vim.startswith(output, "--- PASS")
         then
-          table.insert(tests[line.Package][line.Test].output, output)
+          table.insert(tests[line.Package][line.Test].output, vim.fn.trim(line.Output, "\n ", 2))
         end
       end
     end
@@ -103,25 +103,25 @@ local function parse_failed_output(lines)
     lineno = tonumber(vim.trim(lineno), 10)
   end
 
-  lines = vim.list_slice(lines, 3, #lines - 1)
+  lines = vim.list_slice(lines, 2, #lines - 1)
 
   return file, lineno, lines
 end
 
---- @class Test
+--- @class gotest.Test
 --- @field module string?
 --- @field name string
 --- @field failed boolean?
 --- @field parent string?
 --- @field real_name string?
---- @field line string?
+--- @field file string?
 --- @field lineno number?
 --- @field output string[]
 
 --- @param tests table
 --- @param module_name string
 --- @param test_name string
---- @param test Test
+--- @param test gotest.Test
 local function new_test(tests, module_name, test_name, test)
   test = {
     name = test_name,
@@ -139,14 +139,14 @@ local function new_test(tests, module_name, test_name, test)
   end
 
   if test.failed and test.output then
-    test.line, test.lineno, test.output = parse_failed_output(test.output)
+    test.file, test.lineno, test.output = parse_failed_output(test.output)
   end
 
   return test
 end
 
 --- @param lines string[]
---- @return Test[]
+--- @return gotest.Test[]
 return function(lines)
   local tests = parse(lines)
   local output = {}
@@ -156,6 +156,19 @@ return function(lines)
       table.insert(output, new_test(tests, module_name, test_name, test))
     end
   end
+
+  output = vim.fn.sort(output, function(a, b)
+    local a_sort = vim.fn.join({ (a.module or ""), (a.parent or ""), a.name }, "#")
+    local b_sort = vim.fn.join({ (b.module or ""), (b.parent or ""), b.name }, "#")
+
+    if a_sort < b_sort then
+      return -1
+    elseif a_sort > b_sort then
+      return 1
+    end
+
+    return 0
+  end)
 
   return output
 end

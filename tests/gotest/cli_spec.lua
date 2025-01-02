@@ -9,7 +9,7 @@ describe("gotest cli", function()
       it("cached", function()
         local actual = cli.build_gotest_cmd(
           "./foo/bar/internal/quotation/domain",
-          "TestQuotaGenerator_Generate",
+          { "TestQuotaGenerator_Generate" },
           "april with no holidays",
           { cached = true }
         )
@@ -28,7 +28,7 @@ describe("gotest cli", function()
       it("timeout and cache", function()
         local actual = cli.build_gotest_cmd(
           "./foo/bar/internal/quotation/domain",
-          "TestQuotaGenerator_Generate",
+          { "TestQuotaGenerator_Generate" },
           "april with no holidays",
           { cached = true, timeout = 30 }
         )
@@ -50,7 +50,7 @@ describe("gotest cli", function()
       it("should build with path, test and subtest", function()
         local actual = cli.build_gotest_cmd(
           "./foo/bar/internal/quotation/domain",
-          "TestQuotaGenerator_Generate",
+          { "TestQuotaGenerator_Generate" },
           "april with no holidays"
         )
         local expected = {
@@ -67,7 +67,7 @@ describe("gotest cli", function()
       end)
 
       it("should build with test and subtest", function()
-        local actual = cli.build_gotest_cmd(nil, "TestQuotaGenerator_Generate", "april with no holidays")
+        local actual = cli.build_gotest_cmd(nil, { "TestQuotaGenerator_Generate" }, "april with no holidays")
         local expected = {
           "go",
           "test",
@@ -81,7 +81,7 @@ describe("gotest cli", function()
       end)
 
       it("should build with test", function()
-        local actual = cli.build_gotest_cmd(nil, "TestQuotaGenerator_Generate")
+        local actual = cli.build_gotest_cmd(nil, { "TestQuotaGenerator_Generate" })
         local expected = {
           "go",
           "test",
@@ -95,7 +95,7 @@ describe("gotest cli", function()
       end)
 
       it("should build with path and test", function()
-        local actual = cli.build_gotest_cmd("./foo/bar/internal/quotation/domain", "TestQuotaGenerator_Generate")
+        local actual = cli.build_gotest_cmd("./foo/bar/internal/quotation/domain", { "TestQuotaGenerator_Generate" })
         local expected = {
           "go",
           "test",
@@ -129,9 +129,9 @@ describe("gotest cli", function()
         end)
       end)
 
-      it("shoudl fail is path or test_name is missing", function()
+      it("should fail is path or test_name is missing", function()
         assert.is.error(function()
-          cli.build_gotest_cmd("", "")
+          cli.build_gotest_cmd("")
         end)
       end)
     end)

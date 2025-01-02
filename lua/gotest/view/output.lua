@@ -58,16 +58,12 @@ local function set_highlights(bufnr, lines)
   end
 end
 
----@param cmd string[]
----@param results gotest.CliOutputLine[]
----@param failed boolean
-function M:open(cmd, results, failed)
-  if (failed and not self.opts.show.fail) or (not failed and not self.opts.show.success) then
-    self:close()
+---@class gotest.OutputLine
+---@field text string
+---@field highlight string
 
-    return
-  end
-
+---@param lines gotest.OutputLine[]
+function M:show(lines)
   if not Util.buf_exists(self.buf) then
     Util.close_buf(self.buf)
     self.buf = Util.create_buf()
@@ -78,21 +74,35 @@ function M:open(cmd, results, failed)
     self.win = Util.create_win(self.buf, self.opts.height)
   end
 
-  local lines = resultsToLines(cmd, results)
+  local buf_lines = {}
 
-  Util.set_buf_lines(self.buf, lines)
-  Util.scroll_to_bottom(self.win, self.buf)
+  for _, line in ipairs(lines) do
+    if not line.text then
+      line.text = ""
+    end
 
-  if (failed and self.opts.focus.fail) or (not failed and self.opts.focus.success) then
-    vim.api.nvim_set_current_win(self.win)
+    table.insert(buf_lines, vim.fn.trim(line.text, "\n"))
   end
 
-  set_highlights(self.buf, lines)
+  vim.api.nvim_buf_clear_namespace(self.buf, 0, 0, -1)
+  Util.set_buf_lines(self.buf, buf_lines)
+
+  for index, line in ipairs(lines) do
+    if line.highlight then
+      vim.api.nvim_buf_add_highlight(self.buf, 0, line.highlight, index - 1, 0, -1)
+    end
+  end
+
+  vim.api.nvim_set_current_win(self.win)
 end
 
-function M:close()
+function M:hide()
   Util.close_buf(self.buf)
   Util.close_win(self.win)
+end
+
+function M:destroy()
+  self:hide()
   self.buf = nil
   self.win = nil
 end
