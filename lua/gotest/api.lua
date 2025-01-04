@@ -1,70 +1,49 @@
 local Cli = require("gotest.new_cli")
-local Util = require("gotest.util")
 local Notify = require("gotest.notify")
-local test_file = require("gotest.test_file")
-local Output = require("gotest.view.output")
+local TestFile = require("gotest.test_file")
+local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
-local parse = require("gotest.gotest_parse")
+local Parser = require("gotest.parser")
+local formatter = require("gotest.formatter")
 
 ---@class gotest.Api
----@field opts gotest.Config
----@field output gotest.Output
+---@field _opts gotest.Config
+---@field _view gotest.View
 local M = {}
-
-M.__index = M
 
 ---@param opts gotest.Config
 function M.new(opts)
-  local self = setmetatable({}, M)
+  local self = setmetatable({}, { __index = M })
 
-  self.opts = opts or {}
-  self.output = Output.new(self.opts.output)
+  self._opts = opts or {}
+  self._view = View.new(self._opts.view)
 
   return self
 end
 
 ---@param bufnr integer
 function M:test_nearest(bufnr)
-  assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
+  local file = TestFile.new(bufnr)
 
-  if not Util.is_test_file(bufnr) then
+  if not file:is_test() then
+    Notify.info("Not a Go test file")
+
     return
   end
 
-  local test_names, subtest_name = test_file.get_current_test(bufnr)
+  local test_names, subtest_name = file:get_current_test()
   if not test_names then
+    Notify.info("No tests found")
+
     return
   end
 
-  local file_path = Util.get_relative_dir_path(bufnr)
+  local file_path = file:get_dir()
   local cmd = Cli.build_gotest_cmd("./" .. file_path, test_names, subtest_name)
 
   Notify.info("Tests running...")
 
   local lines, exit_code = Cli.exec_cmd(cmd)
-  local view = Output.new(self.opts.output)
-  local output_lines = {
-    {
-      text = vim.fn.join(cmd, " "),
-      highlight = "Comment",
-    },
-    {},
-  }
-
-  local ok, tests = pcall(parse, lines)
-  if not ok then
-    for i in ipairs(lines) do
-      table.insert(output_lines, {
-        text = lines[i],
-        highlight = "DiagnosticError",
-      })
-    end
-
-    view:show(output_lines)
-
-    return
-  end
-
   local failed = exit_code ~= 0
 
   if failed then
@@ -73,31 +52,16 @@ function M:test_nearest(bufnr)
     Notify.info("Tests PASSED")
   end
 
-  for i, test in ipairs(tests) do
-    if (failed and test.failed) or not failed or #test.output > 0 then
-      local name = test.name
-      if test.parent then
-        name = " ┗━ " .. string.gsub(name, "^" .. test.parent .. "/", "")
-      end
+  local parser = Parser.new(lines)
 
-      table.insert(output_lines, {
-        text = name,
-        highlight = (test.failed and "DiagnosticError") or "DiagnosticHint",
-      })
+  local tests = parser:parse()
+  if not tests then
+    self._view:show(formatter.format_error(cmd, lines))
 
-      for _, line in ipairs(test.output) do
-        if not test.failed then
-          line = "\t" .. line
-        end
-
-        table.insert(output_lines, {
-          text = line,
-        })
-      end
-    end
+    return
   end
 
-  view:show(output_lines)
+  self._view:show(formatter.format_tests(cmd, exit_code, tests))
   -- for _, test in ipairs(tests) do
   --   if test.failed and test.file then
   --     table.insert(qf_items, {

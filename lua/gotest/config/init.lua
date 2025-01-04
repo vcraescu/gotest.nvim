@@ -2,8 +2,8 @@ local M = {}
 
 ---@class gotest.Config
 local defaults = {
-  ---@class gotest.Config.output
-  output = {
+  ---@class gotest.Config.view
+  view = {
     focus = {
       fail = true,
       success = false,

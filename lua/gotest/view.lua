@@ -1,7 +1,11 @@
+---@class gotest.View
+---@field _opts gotest.Config.view
+---@field _buf number
+---@field _win number
 local M = {}
 
 --- @return number
-function M.create_buf()
+local function create_buf()
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>close<cr>", { noremap = true, silent = true })
 
@@ -11,7 +15,7 @@ end
 ---@param bufnr number
 ---@param height number
 ---@return number
-function M.create_win(bufnr, height)
+local function create_win(bufnr, height)
   local current_win = vim.api.nvim_get_current_win()
 
   vim.cmd.new()
@@ -35,34 +39,27 @@ end
 ---@param bufnr number
 ---@param lines string[]
 ---@return nil
-function M.set_buf_lines(bufnr, lines)
+local function set_buf_lines(bufnr, lines)
   vim.api.nvim_set_option_value("modifiable", true, { buf = bufnr })
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
   vim.api.nvim_set_option_value("modifiable", false, { buf = bufnr })
 end
 
-function M.close_buf(bufnr)
+local function close_buf(bufnr)
   if bufnr then
     vim.api.nvim_buf_delete(bufnr, { force = true })
   end
 end
 
-function M.close_win(win)
+local function close_win(win)
   if win then
     pcall(vim.api.nvim_win_close, win, true)
   end
 end
 
----@param win number
----@param bufnr number
-function M.scroll_to_bottom(win, bufnr)
-  local last_line = vim.api.nvim_buf_line_count(bufnr)
-  vim.api.nvim_win_set_cursor(win, { last_line, 0 })
-end
-
 ---@param bufnr number
 ---@return boolean
-function M.buf_exists(bufnr)
+local function buf_exists(bufnr)
   if not bufnr then
     return false
   end
@@ -72,12 +69,62 @@ end
 
 ---@param win number
 ---@return boolean
-function M.win_exists(win)
+local function win_exists(win)
   if not win then
     return false
   end
 
   return vim.api.nvim_win_is_valid(win)
+end
+
+---@param opts? gotest.Config.view
+function M.new(opts)
+  return setmetatable({ _opts = opts or {} }, { __index = M })
+end
+
+---@param lines gotest.FormattedLine[]
+function M:show(lines)
+  if not buf_exists(self._buf) then
+    close_buf(self._buf)
+    self._buf = create_buf()
+  end
+
+  if not win_exists(self._win) then
+    close_win(self._win)
+    self._win = create_win(self._buf, self._opts.height)
+  end
+
+  local buf_lines = {}
+
+  for _, line in ipairs(lines) do
+    if not line.text then
+      line.text = ""
+    end
+
+    table.insert(buf_lines, vim.fn.trim(line.text, "\n"))
+  end
+
+  vim.api.nvim_buf_clear_namespace(self._buf, 0, 0, -1)
+  set_buf_lines(self._buf, buf_lines)
+
+  for index, line in ipairs(lines) do
+    if line.highlight then
+      vim.api.nvim_buf_add_highlight(self._buf, 0, line.highlight, index - 1, 0, -1)
+    end
+  end
+
+  vim.api.nvim_set_current_win(self._win)
+end
+
+function M:hide()
+  close_buf(self._buf)
+  close_win(self._win)
+end
+
+function M:destroy()
+  self:hide()
+  self._buf = nil
+  self._win = nil
 end
 
 return M
