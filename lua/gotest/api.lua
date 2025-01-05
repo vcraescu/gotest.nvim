@@ -56,12 +56,12 @@ function M:test_nearest(bufnr)
 
     local tests = parser:parse()
     if not tests then
-      self._view:show(Formatter.format_error(cmd, lines))
+      self._view:show(cmd, lines)
 
       return
     end
 
-    self._view:show(Formatter.format_tests(cmd, exit_code, tests))
+    self._view:show(cmd, tests)
   end)
   -- for _, test in ipairs(tests) do
   --   if test.failed and test.file then

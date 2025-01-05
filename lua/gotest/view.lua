@@ -1,130 +1,177 @@
----@class gotest.View
----@field _opts gotest.Config.view
----@field _buf number
----@field _win number
+--- @class gotest.View
+--- @field opts gotest.Config.view
+--- @field _buf number
+--- @field _win number
+--- @field _ns number
 local M = {}
 
---- @return number
-local function create_buf()
-  local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>close<cr>", { noremap = true, silent = true })
+local FAILED_HL = "DiagnosticError"
+local PASSED_HL = "DiagnosticHint"
+local SKIPPED_HL = "DiagnosticWarn"
 
-  return bufnr
-end
-
----@param bufnr number
----@param height number
----@return number
-local function create_win(bufnr, height)
-  local current_win = vim.api.nvim_get_current_win()
-
-  vim.cmd.new()
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, height)
-  vim.wo.winfixheight = true
-
-  local win = vim.api.nvim_get_current_win()
-
-  vim.api.nvim_win_set_buf(0, bufnr)
-  vim.api.nvim_win_set_height(0, height)
-
-  -- we need to schedule this operation otherwise it will fail because of BufEnter autocmd from nvim-lint
-  vim.schedule(function()
-    vim.api.nvim_set_current_win(current_win)
-  end)
-
-  return win
-end
-
----@param bufnr number
----@param lines string[]
----@return nil
-local function set_buf_lines(bufnr, lines)
-  vim.api.nvim_set_option_value("modifiable", true, { buf = bufnr })
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-  vim.api.nvim_set_option_value("modifiable", false, { buf = bufnr })
-end
-
-local function close_buf(bufnr)
-  if bufnr then
-    vim.api.nvim_buf_delete(bufnr, { force = true })
-  end
-end
-
-local function close_win(win)
-  if win then
-    pcall(vim.api.nvim_win_close, win, true)
-  end
-end
-
----@param bufnr number
----@return boolean
-local function buf_exists(bufnr)
-  if not bufnr then
-    return false
-  end
-
-  return vim.api.nvim_buf_is_valid(bufnr)
-end
-
----@param win number
----@return boolean
-local function win_exists(win)
-  if not win then
-    return false
-  end
-
-  return vim.api.nvim_win_is_valid(win)
-end
-
----@param opts? gotest.Config.view
+--- @param opts? gotest.Config.view
 function M.new(opts)
-  return setmetatable({ _opts = opts or {} }, { __index = M })
+  return setmetatable({
+    opts = opts or {},
+    _ns = vim.api.nvim_create_namespace(""),
+  }, { __index = M })
 end
 
----@param lines gotest.FormattedLine[]
-function M:show(lines)
-  if not buf_exists(self._buf) then
-    close_buf(self._buf)
-    self._buf = create_buf()
+--- @param cmd string[]
+--- @param tests gotest.GoTestNode[]
+function M:show(cmd, tests)
+  if not self:_buf_exists() then
+    self:_create_buf()
   end
 
-  if not win_exists(self._win) then
-    close_win(self._win)
-    self._win = create_win(self._buf, self._opts.height)
+  if not self:_win_exists() then
+    self:_create_win(self.opts.height)
   end
 
-  local buf_lines = {}
+  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
 
-  for _, line in ipairs(lines) do
-    if not line.text then
-      line.text = ""
+  self:_set_buf_lines({
+    vim.fn.join(cmd, " "),
+    "",
+  })
+
+  vim.api.nvim_buf_add_highlight(self._buf, self._ns, "Comment", 0, 0, -1)
+
+  local nodes = M.to_tree_nodes(tests)
+  if nodes then
+    local tree_view = require("gotest.tree.view").new(nodes, self._win)
+
+    tree_view:open()
+  end
+end
+
+--- @param tests gotest.GoTestNode[]
+--- @return gotest.tree.Node[]?
+function M.to_tree_nodes(tests)
+  if not tests then
+    return nil
+  end
+
+  local tree = {}
+
+  tests = M.sort_failed_tests_first(tests)
+
+  for _, test in ipairs(tests) do
+    local hl = test.failed and FAILED_HL
+    hl = test.skipped and SKIPPED_HL or hl
+    hl = test.passed and PASSED_HL or hl
+
+    local node = {
+      name = { value = test.name, hl = hl },
+      expanded = (test.failed or (test.output and vim.fn.empty(test.output) == 0)) and true,
+      text = test.output,
+    }
+
+    if test.tests then
+      node.children = M.to_tree_nodes(test.tests)
+
+      for _, child in ipairs(node.children) do
+        if child.expanded then
+          node.expanded = true
+
+          break
+        end
+      end
     end
 
-    table.insert(buf_lines, vim.fn.trim(line.text, "\n"))
+    table.insert(tree, node)
   end
 
-  vim.api.nvim_buf_clear_namespace(self._buf, 0, 0, -1)
-  set_buf_lines(self._buf, buf_lines)
+  return tree
+end
 
-  for index, line in ipairs(lines) do
-    if line.highlight then
-      vim.api.nvim_buf_add_highlight(self._buf, 0, line.highlight, index - 1, 0, -1)
+function M.sort_failed_tests_first(tests)
+  return vim.fn.sort(tests, function(a, b)
+    if a.failed then
+      return -1
     end
-  end
 
-  vim.api.nvim_set_current_win(self._win)
+    if b.failed then
+      return 1
+    end
+
+    return 0
+  end)
 end
 
 function M:hide()
-  close_buf(self._buf)
-  close_win(self._win)
+  self:_close_win()
+  self:_close_buf()
 end
 
 function M:destroy()
   self:hide()
   self._buf = nil
   self._win = nil
+end
+
+--- @private
+function M:_create_buf()
+  self._buf = vim.api.nvim_create_buf(false, true)
+  vim.bo[self._buf].buftype = "nofile"
+  vim.bo[self._buf].swapfile = false
+  vim.bo[self._buf].bufhidden = "wipe"
+  vim.api.nvim_set_option_value("buflisted", false, { buf = self._buf }) -- Mark the buffer as unlisted
+
+  vim.keymap.set("n", "q", function()
+    self:hide()
+  end, { buffer = self._buf, remap = true })
+end
+
+--- @private
+function M:_close_buf()
+  _ = self:_buf_exists() and vim.api.nvim_buf_delete(self._buf, { force = false })
+  self._buf = nil
+end
+
+--- @private
+--- @param height number
+function M:_create_win(height)
+  local current_win = vim.api.nvim_get_current_win()
+
+  self._win = vim.api.nvim_open_win(self._buf, false, {
+    split = "below",
+    win = current_win,
+    height = height,
+  })
+  vim.wo[self._win].winfixheight = true
+  vim.api.nvim_set_current_win(self._win)
+  vim.cmd.wincmd("J")
+
+  vim.schedule(function()
+    vim.api.nvim_set_current_win(current_win)
+  end)
+end
+
+--- @private
+--- @param lines string[]
+function M:_set_buf_lines(lines)
+  vim.api.nvim_set_option_value("modifiable", true, { buf = self._buf })
+  vim.api.nvim_buf_set_lines(self._buf, 0, -1, false, lines)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = self._buf })
+end
+
+--- @private
+function M:_close_win()
+  _ = self:_win_exists() and vim.api.nvim_win_close(self._win, true)
+  self._win = nil
+end
+
+--- @private
+--- @return boolean
+function M:_buf_exists()
+  return self._buf and vim.api.nvim_buf_is_valid(self._buf)
+end
+
+--- @private
+--- @return boolean
+function M:_win_exists()
+  return self._win and vim.api.nvim_win_is_valid(self._win)
 end
 
 return M
