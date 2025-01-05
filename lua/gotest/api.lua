@@ -1,10 +1,10 @@
-local Cli = require("gotest.new_cli")
+local Cli = require("gotest.cli")
 local Notify = require("gotest.notify")
 local TestFile = require("gotest.test_file")
 local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
 local Parser = require("gotest.parser")
-local formatter = require("gotest.formatter")
+local Formatter = require("gotest.formatter")
 
 ---@class gotest.Api
 ---@field _opts gotest.Config
@@ -26,14 +26,14 @@ function M:test_nearest(bufnr)
   local file = TestFile.new(bufnr)
 
   if not file:is_test() then
-    Notify.info("Not a Go test file")
+    Notify.warn("Not a Go test file")
 
     return
   end
 
   local test_names, subtest_name = file:get_current_test()
   if not test_names then
-    Notify.info("No tests found")
+    Notify.warn("No tests found")
 
     return
   end
@@ -43,25 +43,26 @@ function M:test_nearest(bufnr)
 
   Notify.info("Tests running...")
 
-  local lines, exit_code = Cli.exec_cmd(cmd)
-  local failed = exit_code ~= 0
+  Cli.exec_cmd({ cmd = cmd }, function(lines, exit_code)
+    local failed = exit_code ~= 0
 
-  if failed then
-    Notify.info("Tests FAILED")
-  else
-    Notify.info("Tests PASSED")
-  end
+    if failed then
+      Notify.warn("Tests FAILED")
+    else
+      Notify.info("Tests PASSED")
+    end
 
-  local parser = Parser.new(lines)
+    local parser = Parser.new(lines)
 
-  local tests = parser:parse()
-  if not tests then
-    self._view:show(formatter.format_error(cmd, lines))
+    local tests = parser:parse()
+    if not tests then
+      self._view:show(Formatter.format_error(cmd, lines))
 
-    return
-  end
+      return
+    end
 
-  self._view:show(formatter.format_tests(cmd, exit_code, tests))
+    self._view:show(Formatter.format_tests(cmd, exit_code, tests))
+  end)
   -- for _, test in ipairs(tests) do
   --   if test.failed and test.file then
   --     table.insert(qf_items, {
