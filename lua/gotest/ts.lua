@@ -120,12 +120,13 @@ function M.get_current_table_test_name(bufnr)
     for id, node in pairs(match) do
       local name = query.captures[id]
 
-      if name == "test.name" then
+      if name == "test.name" and node then
+        print(vim.inspect(node))
         tc_name = vim.treesitter.get_node_text(node, bufnr)
       end
 
       if name == "test.block" then
-        local start_row, _, end_row, _ = node:range()
+        local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
         if curr_row >= start_row and curr_row <= end_row then
           return tc_name
         end
@@ -154,7 +155,7 @@ function M.get_current_sub_test_name(bufnr)
     local name = query.captures[id]
     -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
     if name == "tc.run" then
-      local start_row, _, end_row, _ = node:range()
+      local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
 
       is_inside_test = curr_row >= start_row and curr_row <= end_row
     elseif name == "tc.name" and is_inside_test then

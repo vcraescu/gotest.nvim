@@ -67,6 +67,12 @@ function M.to_tree_nodes(tests)
       text = test.output,
     }
 
+    if node.text then
+      node.text = vim.tbl_map(function(line)
+        return line:gsub("^ *", ""):gsub("^\t", "")
+      end, node.text or {})
+    end
+
     if test.tests then
       node.children = M.to_tree_nodes(test.tests)
 

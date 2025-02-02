@@ -138,7 +138,7 @@ end
 --- @param node gotest.tree.Node
 --- @return string
 function M:_get_node_icon(node)
-  if (node.children and #node.children > 0) or node.text then
+  if (node.children and #node.children > 0) or (node.text and #node.text > 0) then
     return self:_is_expanded(node) and self.opts.icons.opened or self.opts.icons.closed
   end
 
