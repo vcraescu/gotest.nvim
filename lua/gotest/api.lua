@@ -4,7 +4,6 @@ local TestFile = require("gotest.test_file")
 local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
 local Parser = require("gotest.parser")
-local Formatter = require("gotest.formatter")
 
 ---@class gotest.Api
 ---@field _opts gotest.Config
@@ -55,14 +54,13 @@ function M:test_nearest(bufnr)
     local parser = Parser.new(lines)
 
     local tests = parser:parse()
-    if not tests then
-      self._view:show(cmd, lines)
-
-      return
+    if tests then
+      return self._view:show(cmd, tests)
     end
 
-    self._view:show(cmd, tests)
+    self._view:show_raw(cmd, lines)
   end)
+
   -- for _, test in ipairs(tests) do
   --   if test.failed and test.file then
   --     table.insert(qf_items, {

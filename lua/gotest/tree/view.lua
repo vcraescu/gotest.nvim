@@ -44,9 +44,9 @@ local defaults = {
 
 local M = {}
 
-local function generate_id()
-  math.randomseed(os.time())
+math.randomseed(os.time())
 
+local function generate_id()
   ---@diagnostic disable-next-line: undefined-field
   return tostring(vim.loop.hrtime()) .. tostring(math.random(100000, 999999999))
 end

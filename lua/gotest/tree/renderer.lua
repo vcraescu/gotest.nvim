@@ -77,7 +77,7 @@ function M:_get_text(s)
     end
   end
 
-  return out
+  return vim.fn.join(out, " ")
 end
 
 --- @private

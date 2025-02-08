@@ -30,24 +30,66 @@ function M:show(cmd, tests)
 
   vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
 
-  self:_set_buf_lines({
+  local lines = {
     vim.fn.join(cmd, " "),
     "",
-  })
+  }
+
+  for _, test in ipairs(tests) do
+    if (test.passed or test.tests) and test.output then
+      vim.list_extend(lines, test.output)
+    end
+
+    for _, subtest in ipairs(test.tests or {}) do
+      if subtest.passed and subtest.output then
+        vim.list_extend(lines, subtest.output)
+      end
+    end
+  end
+
+  if #lines > 0 then
+    table.insert(lines, "")
+  end
+
+  self:_set_buf_lines(lines)
 
   vim.api.nvim_buf_add_highlight(self._buf, self._ns, "Comment", 0, 0, -1)
 
-  local nodes = M.to_tree_nodes(tests)
-  if nodes then
-    local tree_view = require("gotest.tree.view").new(nodes, self._win)
-
-    tree_view:open()
+  local nodes = M._to_tree_nodes(tests)
+  if not nodes then
+    return
   end
+
+  local tree_view = require("gotest.tree.view").new(nodes, self._win)
+
+  tree_view:open()
+end
+
+--- @param cmd string[]
+--- @param lines string[]
+function M:show_raw(cmd, lines)
+  if not self:_buf_exists() then
+    self:_create_buf()
+  end
+
+  if not self:_win_exists() then
+    self:_create_win(self.opts.height)
+  end
+
+  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
+
+  self:_set_buf_lines({
+    vim.fn.join(cmd, " "),
+    "",
+    unpack(lines),
+  })
+
+  vim.api.nvim_buf_add_highlight(self._buf, self._ns, "Comment", 0, 0, -1)
 end
 
 --- @param tests gotest.GoTestNode[]
 --- @return gotest.tree.Node[]?
-function M.to_tree_nodes(tests)
+function M._to_tree_nodes(tests)
   if not tests then
     return nil
   end
@@ -67,6 +109,10 @@ function M.to_tree_nodes(tests)
       text = test.output,
     }
 
+    if test.passed then
+      node.text = nil
+    end
+
     if node.text then
       node.text = vim.tbl_map(function(line)
         return line:gsub("^ *", ""):gsub("^\t", "")
@@ -74,7 +120,7 @@ function M.to_tree_nodes(tests)
     end
 
     if test.tests then
-      node.children = M.to_tree_nodes(test.tests)
+      node.children = M._to_tree_nodes(test.tests)
 
       for _, child in ipairs(node.children) do
         if child.expanded then
