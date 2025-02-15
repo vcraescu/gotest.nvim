@@ -1,27 +1,5 @@
---- @class gotest.tree.Config
---- @field renderer gotest.tree.Config.renderer
-
---- @class gotest.tree.Config.renderer
---- @field icons gotest.tree.Config.renderer.icons
---- @field indent string
-
---- @class gotest.tree.Config.renderer.icons
---- @field closed string
---- @field opened string
-
---- @type gotest.tree.Config
-local defaults = {
-  renderer = {
-    indent = "  ",
-    icons = {
-      closed = " ",
-      opened = " ",
-    },
-  },
-}
-
 --- @class gotest.tree.View
---- @field opts gotest.tree.Config
+--- @field opts gotest.Config.view.tree
 --- @field _nodes gotest.tree.Node[]
 --- @field _nodes_list table<number, gotest.tree.Node>
 --- @field _ns number
@@ -53,9 +31,9 @@ end
 
 --- @param nodes gotest.tree.Node[]
 --- @param win number
---- @param opts? gotest.tree.Config
+--- @param opts? gotest.Config.view.tree
 function M.new(nodes, win, opts)
-  opts = vim.tbl_deep_extend("force", defaults, opts or {})
+  opts = opts or {}
   local _nodes = M._init_nodes(nodes, 1)
 
   return setmetatable({

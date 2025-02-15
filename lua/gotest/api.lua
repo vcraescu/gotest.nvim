@@ -6,7 +6,7 @@ local Diagnostics = require("gotest.diagnostics")
 local Parser = require("gotest.parser")
 
 ---@class gotest.Api
----@field _opts gotest.Config
+---@field opts gotest.Config
 ---@field _view gotest.View
 local M = {}
 
@@ -14,8 +14,8 @@ local M = {}
 function M.new(opts)
   local self = setmetatable({}, { __index = M })
 
-  self._opts = opts or {}
-  self._view = View.new(self._opts.view)
+  self.opts = opts or {}
+  self._view = View.new(self.opts.view)
 
   return self
 end

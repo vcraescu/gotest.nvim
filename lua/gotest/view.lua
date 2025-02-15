@@ -30,13 +30,10 @@ function M:show(cmd, tests)
 
   vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
 
-  local lines = {
-    vim.fn.join(cmd, " "),
-    "",
-  }
+  local lines = {}
 
   for _, test in ipairs(tests) do
-    if (test.passed or test.tests) and test.output then
+    if (test.passed or test.tests or not test.name) and test.output then
       vim.list_extend(lines, test.output)
     end
 
@@ -51,18 +48,19 @@ function M:show(cmd, tests)
     table.insert(lines, "")
   end
 
-  self:_set_buf_lines(lines)
-
-  vim.api.nvim_buf_add_highlight(self._buf, self._ns, "Comment", 0, 0, -1)
+  self._init_buf(self, cmd, lines)
 
   local nodes = M._to_tree_nodes(tests)
   if not nodes then
+    self:_try_focus(self:_is_tests_failed(tests))
+
     return
   end
 
-  local tree_view = require("gotest.tree.view").new(nodes, self._win)
+  local tree_view = require("gotest.tree.view").new(nodes, self._win, self.opts.tree)
 
   tree_view:open()
+  self:_try_focus(self:_is_tests_failed(tests))
 end
 
 --- @param cmd string[]
@@ -76,6 +74,33 @@ function M:show_raw(cmd, lines)
     self:_create_win(self.opts.height)
   end
 
+  self._init_buf(self, cmd, lines)
+  self:_try_focus(true)
+end
+
+function M:_try_focus(failed)
+  vim.schedule(function()
+    if (failed and self.opts.focus.fail) or (not failed and self.opts.focus.success) then
+      vim.api.nvim_set_current_win(self._win)
+
+      return
+    end
+  end)
+end
+
+--- @param tests gotest.GoTestNode[]
+--- @return boolean
+function M:_is_tests_failed(tests)
+  for _, test in ipairs(tests) do
+    if test.failed or not test.name then
+      return true
+    end
+  end
+
+  return false
+end
+
+function M:_init_buf(cmd, lines)
   vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
 
   self:_set_buf_lines({
@@ -99,42 +124,44 @@ function M._to_tree_nodes(tests)
   tests = M.sort_failed_tests_first(tests)
 
   for _, test in ipairs(tests) do
-    local hl = test.failed and FAILED_HL
-    hl = test.skipped and SKIPPED_HL or hl
-    hl = test.passed and PASSED_HL or hl
+    if test.name then
+      local hl = test.failed and FAILED_HL
+      hl = test.skipped and SKIPPED_HL or hl
+      hl = test.passed and PASSED_HL or hl
 
-    local node = {
-      name = { value = test.name, hl = hl },
-      expanded = (test.failed or (test.output and vim.fn.empty(test.output) == 0)) and true,
-      text = test.output,
-    }
+      local node = {
+        name = { value = test.name, hl = hl },
+        expanded = (test.failed or (test.output and vim.fn.empty(test.output) == 0)) and true,
+        text = test.output,
+      }
 
-    if test.passed then
-      node.text = nil
-    end
+      if test.passed then
+        node.text = nil
+      end
 
-    if node.text then
-      node.text = vim.tbl_map(function(line)
-        return line:gsub("^ *", ""):gsub("^\t", "")
-      end, node.text or {})
-    end
+      if node.text then
+        node.text = vim.tbl_map(function(line)
+          return line:gsub("^ *", ""):gsub("^\t", "")
+        end, node.text or {})
+      end
 
-    if test.tests then
-      node.children = M._to_tree_nodes(test.tests)
+      if test.tests then
+        node.children = M._to_tree_nodes(test.tests)
 
-      for _, child in ipairs(node.children) do
-        if child.expanded then
-          node.expanded = true
+        for _, child in ipairs(node.children) do
+          if child.expanded then
+            node.expanded = true
 
-          break
+            break
+          end
         end
       end
-    end
 
-    table.insert(tree, node)
+      table.insert(tree, node)
+    end
   end
 
-  return tree
+  return #tree > 0 and tree or nil
 end
 
 function M.sort_failed_tests_first(tests)

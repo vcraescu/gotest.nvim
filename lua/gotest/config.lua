@@ -1,8 +1,39 @@
 local M = {}
 
+---@class gotest.Config.view.focus
+---@field fail boolean
+---@field success boolean
+
+---@class gotest.Config.view.show
+---@field fail boolean
+---@field success boolean
+
+---@class gotest.Config.view.tree.renderer.icons
+---@field closed string
+---@field opened string
+
+---@class gotest.Config.view.tree.renderer
+---@field indent string
+---@field icons gotest.Config.view.tree.renderer.icons
+
+---@class gotest.Config.view.tree
+---@field renderer gotest.Config.view.tree.renderer
+
+---@class gotest.Config.view
+---@field focus gotest.Config.view.focus
+---@field height number
+---@field show gotest.Config.view.show
+---@field tree gotest.Config.view.tree
+
+---@class gotest.Config.diagnostics
+---@field enabled boolean
+
 ---@class gotest.Config
+---@field view gotest.Config.view
+---@field timeout number
+---@field disable_test_cache boolean
+---@field diagnostics gotest.Config.diagnostics
 local defaults = {
-  ---@class gotest.Config.view
   view = {
     focus = {
       fail = true,
@@ -12,6 +43,15 @@ local defaults = {
     show = {
       fail = true,
       success = true,
+    },
+    tree = {
+      renderer = {
+        indent = "  ",
+        icons = {
+          closed = " ",
+          opened = " ",
+        },
+      },
     },
   },
   timeout = 30,

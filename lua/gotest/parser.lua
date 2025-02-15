@@ -155,6 +155,14 @@ function M:parse()
     end
   end
 
+  if vim.fn.empty(all_test_names) == 1 then
+    return vim.fn.map(decoded_lines, function(_, line)
+      return {
+        output = { vim.fn.trim(line.Output, "\n ", 2) },
+      }
+    end)
+  end
+
   for _, line in ipairs(decoded_lines) do
     if line.Test then
       tests[line.Package] = tests[line.Package] or {}
