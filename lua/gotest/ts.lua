@@ -93,7 +93,7 @@ function M.get_func_def_line_no(bufnr, name)
   local query = vim.treesitter.query.parse("go", find_func_by_name_query)
 
   for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
-    if query.captures[id] == "func_name" then
+    if node and query.captures[id] == "func_name" then
       local row, _, _ = node:start()
 
       return row
@@ -117,18 +117,25 @@ function M.get_current_table_test_name(bufnr)
   for _, match, _ in query:iter_matches(root, bufnr, 0, -1) do
     local tc_name = nil
 
-    for id, node in pairs(match) do
-      local name = query.captures[id]
-
-      if name == "test.name" and node then
-        print(vim.inspect(node))
-        tc_name = vim.treesitter.get_node_text(node, bufnr)
+    for id, nodes in pairs(match) do
+      if type(nodes) ~= "table" then
+        nodes = { nodes }
       end
 
-      if name == "test.block" then
-        local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
-        if curr_row >= start_row and curr_row <= end_row then
-          return tc_name
+      local name = query.captures[id]
+
+      for _, node in ipairs(nodes) do
+        if node then
+          if name == "test.name" then
+            tc_name = vim.treesitter.get_node_text(node, bufnr)
+          end
+
+          if name == "test.block" then
+            local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
+            if curr_row >= start_row and curr_row <= end_row then
+              return tc_name
+            end
+          end
         end
       end
     end
@@ -153,6 +160,7 @@ function M.get_current_sub_test_name(bufnr)
 
   for id, node in query:iter_captures(root, bufnr, 0, -1) do
     local name = query.captures[id]
+
     -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
     if name == "tc.run" then
       local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
@@ -179,11 +187,17 @@ function M.get_test_func_names(bufnr)
   local query = vim.treesitter.query.parse("go", query_func_name)
   local output = {}
 
-  for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
-    if query.captures[id] == "func_name" then
-      local func_name = vim.treesitter.get_node_text(node, 0)
-      if vim.startswith(func_name, "Test") then
-        table.insert(output, vim.treesitter.get_node_text(node, 0))
+  for id, nodes, _ in query:iter_captures(root, bufnr, 0, -1) do
+    if type(nodes) ~= "table" then
+      nodes = { nodes }
+    end
+
+    for _, node in ipairs(nodes) do
+      if node and query.captures[id] == "func_name" then
+        local func_name = vim.treesitter.get_node_text(node, 0)
+        if vim.startswith(func_name, "Test") then
+          table.insert(output, vim.treesitter.get_node_text(node, 0))
+        end
       end
     end
   end
