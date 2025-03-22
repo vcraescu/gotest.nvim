@@ -14,9 +14,9 @@ local GoTestResultAction = {
 }
 
 --- @class gotest.GoTestResult
---- @field Action string
---- @field Package string
---- @field Test string
+--- @field Action? string
+--- @field Package? string
+--- @field Test? string
 --- @field Output string
 
 --- @param lines string[]
@@ -96,8 +96,8 @@ local function parse_failed_output(lines)
     assert(file, "Expected non-nil file")
     assert(lineno, "Expected non-nil lineno")
 
-    file = vim.trim(file)
-    lineno = tonumber(vim.trim(lineno), 10)
+    file = vim.fn.trim(file)
+    lineno = tonumber(vim.fn.trim(lineno), 10)
   end
 
   lines = vim.list_slice(lines, 2, #lines - 1)
@@ -121,17 +121,35 @@ function M.new(lines)
   return setmetatable({ _lines = lines }, { __index = M })
 end
 
+--- @return gotest.GoTestResult[]
+function M:parse_results()
+  local decoded_lines, _ = json_decode_lines(self._lines)
+  if decoded_lines then
+    return decoded_lines
+  end
+
+  --- @type gotest.GoTestResult[]
+  local results = {}
+
+  for i, line in ipairs(self._lines) do
+    results[i] = { Output = line }
+  end
+
+  return results
+end
+
 --- @class gotest.GoTestNode
---- @field module string
---- @field name string
+--- @field module? string
+--- @field name? string
 --- @field real_name string?
 --- @field failed? boolean
 --- @field skipped? boolean
 --- @field passed? boolean
+--- @field ignore? boolean
 --- @field file string?
 --- @field lineno number?
 --- @field output string[]
---- @field tests gotest.GoTestNode[]
+--- @field tests? gotest.GoTestNode[]
 
 --- @return gotest.GoTestNode[]?
 --- @return string? error
@@ -140,15 +158,11 @@ function M:parse()
     return self._tests
   end
 
-  local decoded_lines, err = json_decode_lines(self._lines)
-  if not decoded_lines then
-    return nil, err
-  end
-
   local all_test_names = {}
   local tests = {}
+  local results = self:parse_results()
 
-  for _, line in ipairs(decoded_lines) do
+  for _, line in ipairs(results) do
     if line.Test then
       all_test_names[line.Package] = all_test_names[line.Package] or {}
       all_test_names[line.Package][line.Test] = true
@@ -156,14 +170,16 @@ function M:parse()
   end
 
   if vim.fn.empty(all_test_names) == 1 then
-    return vim.fn.map(decoded_lines, function(_, line)
+    return vim.fn.map(results, function(_, line)
+      local output = line.Output and vim.fn.trim(line.Output, "\n ", 2)
+
       return {
-        output = { vim.fn.trim(line.Output, "\n ", 2) },
+        output = { output },
       }
     end)
   end
 
-  for _, line in ipairs(decoded_lines) do
+  for _, line in ipairs(results) do
     if line.Test then
       tests[line.Package] = tests[line.Package] or {}
 
@@ -187,7 +203,6 @@ function M:parse()
         tests[line.Package][parent].tests[test.name] = tests[line.Package][parent].tests[test.name] or test
         test = tests[line.Package][parent].tests[test.name]
       else
-        test.tests = {}
         tests[line.Package][line.Test] = tests[line.Package][line.Test] or test
         test = tests[line.Package][line.Test]
       end
@@ -195,9 +210,10 @@ function M:parse()
       test.failed = line.Action == GoTestResultAction.FAIL or nil
       test.skipped = line.Action == GoTestResultAction.SKIP or nil
       test.passed = line.Action == GoTestResultAction.PASS or nil
+      test.ignored = not test.failed and not test.skipped and not test.passed
 
       if line.Output then
-        local output = vim.fn.trim(line.Output)
+        local output = line.Output and vim.fn.trim(line.Output)
 
         if
           not vim.startswith(output, "=== RUN")

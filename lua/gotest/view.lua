@@ -7,6 +7,7 @@ local M = {}
 
 local FAILED_HL = "DiagnosticError"
 local PASSED_HL = "DiagnosticHint"
+local IGNORED_HL = "Ignore"
 local SKIPPED_HL = "DiagnosticWarn"
 
 --- @param opts? gotest.Config.view
@@ -19,17 +20,44 @@ end
 
 --- @param cmd string[]
 --- @param tests gotest.GoTestNode[]
-function M:show(cmd, tests)
-  if not self:_buf_exists() then
-    self:_create_buf()
+--- @param failed boolean
+function M:show_tests(cmd, tests, failed)
+  local lines = self:_get_tests_output(tests)
+
+  self:_show_win(vim.fn.join(cmd, " "), lines)
+
+  if failed and self:_is_build_failed(tests) then
+    vim.hl.range(self._buf, self._ns, FAILED_HL, { 1, 0 }, { #lines, -1 })
+
+    self:_try_focus(failed)
+
+    return
   end
 
-  if not self:_win_exists() then
-    self:_create_win(self.opts.height)
+  local nodes = M._to_tree_nodes(tests)
+  assert(nodes, "no tests found")
+
+  local tree_view = require("gotest.view.tree.view").new(nodes, self._win, self.opts.tree)
+
+  tree_view:open()
+  self:_try_focus(failed)
+end
+
+--- @param cmd string[]
+--- @param results gotest.GoTestResult[]
+--- @param failed boolean
+function M:show_results(cmd, results, failed)
+  local lines = {}
+
+  for _, result in ipairs(results) do
+    table.insert(lines, result.Output)
   end
 
-  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
+  self:_show_win(vim.fn.join(cmd, " "), lines)
+  self:_try_focus(failed)
+end
 
+function M:_get_tests_output(tests)
   local lines = {}
 
   for _, test in ipairs(tests) do
@@ -45,37 +73,10 @@ function M:show(cmd, tests)
   end
 
   if #lines > 0 then
-    table.insert(lines, "")
+    table.insert(lines, #lines + 1, "")
   end
 
-  self._init_buf(self, cmd, lines)
-
-  local nodes = M._to_tree_nodes(tests)
-  if not nodes then
-    self:_try_focus(self:_is_tests_failed(tests))
-
-    return
-  end
-
-  local tree_view = require("gotest.tree.view").new(nodes, self._win, self.opts.tree)
-
-  tree_view:open()
-  self:_try_focus(self:_is_tests_failed(tests))
-end
-
---- @param cmd string[]
---- @param lines string[]
-function M:show_raw(cmd, lines)
-  if not self:_buf_exists() then
-    self:_create_buf()
-  end
-
-  if not self:_win_exists() then
-    self:_create_win(self.opts.height)
-  end
-
-  self._init_buf(self, cmd, lines)
-  self:_try_focus(true)
+  return lines
 end
 
 function M:_try_focus(failed)
@@ -90,9 +91,9 @@ end
 
 --- @param tests gotest.GoTestNode[]
 --- @return boolean
-function M:_is_tests_failed(tests)
+function M:_is_build_failed(tests)
   for _, test in ipairs(tests) do
-    if test.failed or not test.name then
+    if not test.name then
       return true
     end
   end
@@ -100,22 +101,11 @@ function M:_is_tests_failed(tests)
   return false
 end
 
-function M:_init_buf(cmd, lines)
-  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
-
-  self:_set_buf_lines({
-    vim.fn.join(cmd, " "),
-    "",
-    unpack(lines),
-  })
-
-  vim.api.nvim_buf_add_highlight(self._buf, self._ns, "Comment", 0, 0, -1)
-end
-
+--- @private
 --- @param tests gotest.GoTestNode[]
 --- @return gotest.tree.Node[]?
 function M._to_tree_nodes(tests)
-  if not tests then
+  if not tests or #tests == 0 then
     return nil
   end
 
@@ -125,7 +115,8 @@ function M._to_tree_nodes(tests)
 
   for _, test in ipairs(tests) do
     if test.name then
-      local hl = test.failed and FAILED_HL
+      local hl = test.ignored and IGNORED_HL
+      hl = (test.failed and FAILED_HL) or hl
       hl = test.skipped and SKIPPED_HL or hl
       hl = test.passed and PASSED_HL or hl
 
@@ -139,13 +130,7 @@ function M._to_tree_nodes(tests)
         node.text = nil
       end
 
-      if node.text then
-        node.text = vim.tbl_map(function(line)
-          return line:gsub("^ *", ""):gsub("^\t", "")
-        end, node.text or {})
-      end
-
-      if test.tests then
+      if test.tests and #test.tests > 0 then
         node.children = M._to_tree_nodes(test.tests)
 
         for _, child in ipairs(node.children) do
@@ -176,6 +161,23 @@ function M.sort_failed_tests_first(tests)
 
     return 0
   end)
+end
+
+--- @private
+--- @param title string
+--- @param lines string[]
+function M:_show_win(title, lines)
+  if not self:_buf_exists() then
+    self:_create_buf()
+  end
+
+  if not self:_win_exists() then
+    self:_create_win(self.opts.height)
+  end
+
+  vim.api.nvim_set_option_value("winbar", title, { win = self._win })
+  self:_clear_buf()
+  self:_set_buf_lines(lines)
 end
 
 function M:hide()
@@ -230,8 +232,25 @@ end
 --- @private
 --- @param lines string[]
 function M:_set_buf_lines(lines)
+  if not lines or #lines == 0 then
+    return
+  end
+
+  local buf_lines = {}
+
+  for _, line in ipairs(lines) do
+    vim.list_extend(buf_lines, vim.fn.split(line, "\n"))
+  end
+
+  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
   vim.api.nvim_set_option_value("modifiable", true, { buf = self._buf })
-  vim.api.nvim_buf_set_lines(self._buf, 0, -1, false, lines)
+  vim.api.nvim_buf_set_lines(self._buf, 0, -1, false, buf_lines)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = self._buf })
+end
+
+function M:_clear_buf()
+  vim.api.nvim_set_option_value("modifiable", true, { buf = self._buf })
+  vim.api.nvim_buf_set_lines(self._buf, 0, -1, false, {})
   vim.api.nvim_set_option_value("modifiable", false, { buf = self._buf })
 end
 

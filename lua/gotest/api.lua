@@ -46,19 +46,19 @@ function M:test_nearest(bufnr)
     local failed = exit_code ~= 0
 
     if failed then
-      Notify.warn("Tests FAILED")
+      Notify.error("Tests FAILED")
     else
-      Notify.info("Tests PASSED")
+      Notify.success("Tests PASSED")
     end
 
     local parser = Parser.new(lines)
+    local results = parser:parse_results()
 
+    -- return self._view:show_results(cmd, results, failed)
     local tests = parser:parse()
     if tests then
-      return self._view:show(cmd, tests)
+      return self._view:show_tests(cmd, tests, failed)
     end
-
-    self._view:show_raw(cmd, lines)
   end)
 
   -- for _, test in ipairs(tests) do

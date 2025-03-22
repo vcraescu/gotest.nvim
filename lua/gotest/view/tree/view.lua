@@ -44,13 +44,13 @@ function M.new(nodes, win, opts)
     _buf = vim.api.nvim_win_get_buf(win),
     _win = win,
     _output = {},
-    _renderer = require("gotest.tree.renderer").new(opts.renderer),
+    _renderer = require("gotest.view.tree.renderer").new(opts.renderer),
     _mounted_at = 0,
   }, { __index = M })
 end
 
 function M:open()
-  self._mounted_at = vim.api.nvim_buf_line_count(self._buf)
+  self._mounted_at = vim.api.nvim_buf_line_count(self._buf) - 1
 
   self:_setup_keymaps()
   self:_render()
@@ -102,7 +102,7 @@ function M:_render()
   vim.api.nvim_set_option_value("modifiable", false, { buf = self._buf })
 
   for _, hl in ipairs(highlights) do
-    vim.api.nvim_buf_add_highlight(self._buf, self._ns, hl.group, hl.line, hl.col_start or 0, hl.col_end or -1)
+    vim.hl.range(self._buf, self._ns, hl.group, { hl.line, hl.col_start or 0 }, { hl.line, hl.col_end or -1 })
   end
 end
 

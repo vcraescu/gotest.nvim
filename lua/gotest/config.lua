@@ -50,6 +50,7 @@ local defaults = {
         icons = {
           closed = " ",
           opened = " ",
+          passed = "󰸞 ",
         },
       },
     },
