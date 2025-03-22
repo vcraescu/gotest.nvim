@@ -1,0 +1,214 @@
+{"Time":"2024-12-26T13:58:58.932155+02:00","Action":"start","Package":"github.com/foo/bar/cmd/lambdaapi"}
+{"Time":"2024-12-26T13:58:58.932221+02:00","Action":"output","Package":"github.com/foo/bar/cmd/lambdaapi","Output":"?   \tgithub.com/foo/bar/cmd/lambdaapi\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.932231+02:00","Action":"skip","Package":"github.com/foo/bar/cmd/lambdaapi","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.948407+02:00","Action":"start","Package":"github.com/foo/bar/cmd/quotagen"}
+{"Time":"2024-12-26T13:58:58.948433+02:00","Action":"output","Package":"github.com/foo/bar/cmd/quotagen","Output":"?   \tgithub.com/foo/bar/cmd/quotagen\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.94844+02:00","Action":"skip","Package":"github.com/foo/bar/cmd/quotagen","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960062+02:00","Action":"start","Package":"github.com/foo/bar/cmd/server"}
+{"Time":"2024-12-26T13:58:58.96009+02:00","Action":"output","Package":"github.com/foo/bar/cmd/server","Output":"?   \tgithub.com/foo/bar/cmd/server\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960097+02:00","Action":"skip","Package":"github.com/foo/bar/cmd/server","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960119+02:00","Action":"start","Package":"github.com/foo/bar/internal/common/bootstrap"}
+{"Time":"2024-12-26T13:58:58.960136+02:00","Action":"output","Package":"github.com/foo/bar/internal/common/bootstrap","Output":"?   \tgithub.com/foo/bar/internal/common/bootstrap\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960145+02:00","Action":"skip","Package":"github.com/foo/bar/internal/common/bootstrap","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960159+02:00","Action":"start","Package":"github.com/foo/bar/internal/common/domain"}
+{"Time":"2024-12-26T13:58:58.960164+02:00","Action":"output","Package":"github.com/foo/bar/internal/common/domain","Output":"?   \tgithub.com/foo/bar/internal/common/domain\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960169+02:00","Action":"skip","Package":"github.com/foo/bar/internal/common/domain","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960187+02:00","Action":"start","Package":"github.com/foo/bar/internal/common/env"}
+{"Time":"2024-12-26T13:58:58.960206+02:00","Action":"output","Package":"github.com/foo/bar/internal/common/env","Output":"?   \tgithub.com/foo/bar/internal/common/env\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960214+02:00","Action":"skip","Package":"github.com/foo/bar/internal/common/env","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960216+02:00","Action":"start","Package":"github.com/foo/bar/internal/common/http/handler"}
+{"Time":"2024-12-26T13:58:58.960226+02:00","Action":"output","Package":"github.com/foo/bar/internal/common/http/handler","Output":"?   \tgithub.com/foo/bar/internal/common/http/handler\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960228+02:00","Action":"skip","Package":"github.com/foo/bar/internal/common/http/handler","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960239+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation"}
+{"Time":"2024-12-26T13:58:58.960243+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation","Output":"?   \tgithub.com/foo/bar/internal/quotation\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960245+02:00","Action":"skip","Package":"github.com/foo/bar/internal/quotation","Elapsed":0}
+{"Time":"2024-12-26T13:58:58.960247+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation/adapters"}
+{"Time":"2024-12-26T13:58:58.960261+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/adapters","Output":"?   \tgithub.com/foo/bar/internal/quotation/adapters\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:58.960265+02:00","Action":"skip","Package":"github.com/foo/bar/internal/quotation/adapters","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.293981+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation/domain"}
+{"Time":"2024-12-26T13:58:59.294024+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation/gateways/cli"}
+{"Time":"2024-12-26T13:58:59.294033+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/gateways/cli","Output":"?   \tgithub.com/foo/bar/internal/quotation/gateways/cli\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294039+02:00","Action":"skip","Package":"github.com/foo/bar/internal/quotation/gateways/cli","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.294053+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation/gateways/http"}
+{"Time":"2024-12-26T13:58:59.294061+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/gateways/http","Output":"?   \tgithub.com/foo/bar/internal/quotation/gateways/http\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294064+02:00","Action":"skip","Package":"github.com/foo/bar/internal/quotation/gateways/http","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.29408+02:00","Action":"start","Package":"github.com/foo/bar/internal/server"}
+{"Time":"2024-12-26T13:58:59.294092+02:00","Action":"output","Package":"github.com/foo/bar/internal/server","Output":"?   \tgithub.com/foo/bar/internal/server\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294097+02:00","Action":"skip","Package":"github.com/foo/bar/internal/server","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.2941+02:00","Action":"start","Package":"github.com/foo/bar/internal/server/auth"}
+{"Time":"2024-12-26T13:58:59.294104+02:00","Action":"output","Package":"github.com/foo/bar/internal/server/auth","Output":"?   \tgithub.com/foo/bar/internal/server/auth\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294109+02:00","Action":"skip","Package":"github.com/foo/bar/internal/server/auth","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.29412+02:00","Action":"start","Package":"github.com/foo/bar/pkg/googleapi"}
+{"Time":"2024-12-26T13:58:59.294124+02:00","Action":"output","Package":"github.com/foo/bar/pkg/googleapi","Output":"?   \tgithub.com/foo/bar/pkg/googleapi\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294128+02:00","Action":"skip","Package":"github.com/foo/bar/pkg/googleapi","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.294135+02:00","Action":"start","Package":"github.com/foo/bar/pkg/googleapi/gdrive"}
+{"Time":"2024-12-26T13:58:59.294139+02:00","Action":"output","Package":"github.com/foo/bar/pkg/googleapi/gdrive","Output":"?   \tgithub.com/foo/bar/pkg/googleapi/gdrive\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294142+02:00","Action":"skip","Package":"github.com/foo/bar/pkg/googleapi/gdrive","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.294149+02:00","Action":"start","Package":"github.com/foo/bar/pkg/googleapi/gsheets"}
+{"Time":"2024-12-26T13:58:59.294153+02:00","Action":"output","Package":"github.com/foo/bar/pkg/googleapi/gsheets","Output":"?   \tgithub.com/foo/bar/pkg/googleapi/gsheets\t[no test files]\n"}
+{"Time":"2024-12-26T13:58:59.294156+02:00","Action":"skip","Package":"github.com/foo/bar/pkg/googleapi/gsheets","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.497955+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate"}
+{"Time":"2024-12-26T13:58:59.498017+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate","Output":"=== RUN   TestQuotaGenerator_Generate\n"}
+{"Time":"2024-12-26T13:58:59.498047+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate","Output":"=== PAUSE TestQuotaGenerator_Generate\n"}
+{"Time":"2024-12-26T13:58:59.498053+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate"}
+{"Time":"2024-12-26T13:58:59.498058+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours"}
+{"Time":"2024-12-26T13:58:59.498064+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours","Output":"=== RUN   TestQuota_AddHours\n"}
+{"Time":"2024-12-26T13:58:59.498074+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours","Output":"=== PAUSE TestQuota_AddHours\n"}
+{"Time":"2024-12-26T13:58:59.498076+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours"}
+{"Time":"2024-12-26T13:58:59.498077+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks"}
+{"Time":"2024-12-26T13:58:59.498086+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks","Output":"=== RUN   TestRange_BusinessWeeks\n"}
+{"Time":"2024-12-26T13:58:59.498088+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks","Output":"=== PAUSE TestRange_BusinessWeeks\n"}
+{"Time":"2024-12-26T13:58:59.498092+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks"}
+{"Time":"2024-12-26T13:58:59.498093+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate"}
+{"Time":"2024-12-26T13:58:59.498094+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate","Output":"=== CONT  TestQuotaGenerator_Generate\n"}
+{"Time":"2024-12-26T13:58:59.498096+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks"}
+{"Time":"2024-12-26T13:58:59.498097+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks","Output":"=== CONT  TestRange_BusinessWeeks\n"}
+{"Time":"2024-12-26T13:58:59.498103+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.49811+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Output":"=== RUN   TestQuotaGenerator_Generate/april_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498112+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours"}
+{"Time":"2024-12-26T13:58:59.498117+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours","Output":"=== CONT  TestQuota_AddHours\n"}
+{"Time":"2024-12-26T13:58:59.498118+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Output":"=== PAUSE TestQuotaGenerator_Generate/april_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.49812+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.498122+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Output":"oooooooooooooooooooooooooooooooooooooooooooooooo\n"}
+{"Time":"2024-12-26T13:58:59.498127+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date"}
+{"Time":"2024-12-26T13:58:59.498129+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date","Output":"=== RUN   TestRange_BusinessWeeks/no_start_and_end_date\n"}
+{"Time":"2024-12-26T13:58:59.49813+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.498131+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays","Output":"=== RUN   TestQuotaGenerator_Generate/december_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498133+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays","Output":"=== PAUSE TestQuotaGenerator_Generate/december_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498135+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.498144+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date","Output":"=== PAUSE TestRange_BusinessWeeks/no_start_and_end_date\n"}
+{"Time":"2024-12-26T13:58:59.498145+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date"}
+{"Time":"2024-12-26T13:58:59.498147+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays"}
+{"Time":"2024-12-26T13:58:59.498148+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays","Output":"=== RUN   TestQuotaGenerator_Generate/december_with_6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.49815+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date"}
+{"Time":"2024-12-26T13:58:59.498151+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date","Output":"=== RUN   TestRange_BusinessWeeks/no_end_date\n"}
+{"Time":"2024-12-26T13:58:59.498158+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date","Output":"=== PAUSE TestRange_BusinessWeeks/no_end_date\n"}
+{"Time":"2024-12-26T13:58:59.498159+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date"}
+{"Time":"2024-12-26T13:58:59.498161+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april"}
+{"Time":"2024-12-26T13:58:59.498162+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april","Output":"=== RUN   TestRange_BusinessWeeks/april\n"}
+{"Time":"2024-12-26T13:58:59.498171+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april","Output":"=== PAUSE TestRange_BusinessWeeks/april\n"}
+{"Time":"2024-12-26T13:58:59.498178+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april"}
+{"Time":"2024-12-26T13:58:59.498183+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april"}
+{"Time":"2024-12-26T13:58:59.498184+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april","Output":"=== RUN   TestRange_BusinessWeeks/first_week_of_april\n"}
+{"Time":"2024-12-26T13:58:59.498186+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april","Output":"=== PAUSE TestRange_BusinessWeeks/first_week_of_april\n"}
+{"Time":"2024-12-26T13:58:59.498187+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april"}
+{"Time":"2024-12-26T13:58:59.498189+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week"}
+{"Time":"2024-12-26T13:58:59.498193+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week","Output":"=== RUN   TestRange_BusinessWeeks/one_day_of_the_week\n"}
+{"Time":"2024-12-26T13:58:59.498194+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498195+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"=== RUN   TestQuota_AddHours/add_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498197+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays","Output":"=== PAUSE TestQuotaGenerator_Generate/december_with_6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498198+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays"}
+{"Time":"2024-12-26T13:58:59.4982+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week","Output":"=== PAUSE TestRange_BusinessWeeks/one_day_of_the_week\n"}
+{"Time":"2024-12-26T13:58:59.498202+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week"}
+{"Time":"2024-12-26T13:58:59.498203+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend"}
+{"Time":"2024-12-26T13:58:59.498204+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend","Output":"=== RUN   TestRange_BusinessWeeks/weekend\n"}
+{"Time":"2024-12-26T13:58:59.49821+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"=== PAUSE TestQuota_AddHours/add_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498212+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498214+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend","Output":"=== PAUSE TestRange_BusinessWeeks/weekend\n"}
+{"Time":"2024-12-26T13:58:59.498215+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend"}
+{"Time":"2024-12-26T13:58:59.498217+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays"}
+{"Time":"2024-12-26T13:58:59.498219+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays","Output":"=== RUN   TestQuotaGenerator_Generate/september_with_7_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498221+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays","Output":"=== PAUSE TestQuotaGenerator_Generate/september_with_7_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498222+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays"}
+{"Time":"2024-12-26T13:58:59.498224+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.498226+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Output":"=== CONT  TestQuotaGenerator_Generate/april_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498233+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498237+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day","Output":"=== RUN   TestQuota_AddHours/add_hours_more_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498245+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day","Output":"=== PAUSE TestQuota_AddHours/add_hours_more_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498248+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day"}
+{"Time":"2024-12-26T13:58:59.49825+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays"}
+{"Time":"2024-12-26T13:58:59.498251+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays","Output":"=== CONT  TestQuotaGenerator_Generate/september_with_7_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498253+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498254+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day","Output":"=== RUN   TestQuota_AddHours/subtract_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.49826+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day","Output":"=== PAUSE TestQuota_AddHours/subtract_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498262+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498264+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays"}
+{"Time":"2024-12-26T13:58:59.498265+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays","Output":"=== RUN   TestQuota_AddHours/6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498268+02:00","Action":"run","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march"}
+{"Time":"2024-12-26T13:58:59.498277+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march","Output":"=== RUN   TestRange_BusinessWeeks/march\n"}
+{"Time":"2024-12-26T13:58:59.49828+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays","Output":"=== PAUSE TestQuota_AddHours/6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498282+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays"}
+{"Time":"2024-12-26T13:58:59.498284+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march","Output":"=== PAUSE TestRange_BusinessWeeks/march\n"}
+{"Time":"2024-12-26T13:58:59.498286+02:00","Action":"pause","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march"}
+{"Time":"2024-12-26T13:58:59.498291+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498292+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"=== CONT  TestQuota_AddHours/add_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498294+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays"}
+{"Time":"2024-12-26T13:58:59.498295+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays","Output":"=== CONT  TestQuotaGenerator_Generate/december_with_6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498369+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date"}
+{"Time":"2024-12-26T13:58:59.498375+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date","Output":"=== CONT  TestRange_BusinessWeeks/no_start_and_end_date\n"}
+{"Time":"2024-12-26T13:58:59.498478+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend"}
+{"Time":"2024-12-26T13:58:59.498502+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend","Output":"=== CONT  TestRange_BusinessWeeks/weekend\n"}
+{"Time":"2024-12-26T13:58:59.49851+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date"}
+{"Time":"2024-12-26T13:58:59.498516+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date","Output":"=== CONT  TestRange_BusinessWeeks/no_end_date\n"}
+{"Time":"2024-12-26T13:58:59.498524+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays"}
+{"Time":"2024-12-26T13:58:59.498528+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays","Output":"=== CONT  TestQuota_AddHours/6_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498535+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498557+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day","Output":"=== CONT  TestQuota_AddHours/subtract_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.49858+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day"}
+{"Time":"2024-12-26T13:58:59.498585+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day","Output":"=== CONT  TestQuota_AddHours/add_hours_more_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.498591+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april"}
+{"Time":"2024-12-26T13:58:59.498595+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april","Output":"=== CONT  TestRange_BusinessWeeks/first_week_of_april\n"}
+{"Time":"2024-12-26T13:58:59.498605+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays"}
+{"Time":"2024-12-26T13:58:59.498609+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays","Output":"=== CONT  TestQuotaGenerator_Generate/december_with_no_holidays\n"}
+{"Time":"2024-12-26T13:58:59.498615+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april"}
+{"Time":"2024-12-26T13:58:59.498619+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april","Output":"=== CONT  TestRange_BusinessWeeks/april\n"}
+{"Time":"2024-12-26T13:58:59.498626+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march"}
+{"Time":"2024-12-26T13:58:59.498633+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march","Output":"=== CONT  TestRange_BusinessWeeks/march\n"}
+{"Time":"2024-12-26T13:58:59.498665+02:00","Action":"cont","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week"}
+{"Time":"2024-12-26T13:58:59.498678+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week","Output":"=== CONT  TestRange_BusinessWeeks/one_day_of_the_week\n"}
+{"Time":"2024-12-26T13:58:59.498719+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks","Output":"--- PASS: TestRange_BusinessWeeks (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498729+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date","Output":"    --- PASS: TestRange_BusinessWeeks/no_start_and_end_date (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498733+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_start_and_end_date","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498738+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend","Output":"    --- PASS: TestRange_BusinessWeeks/weekend (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498742+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/weekend","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498746+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date","Output":"    --- PASS: TestRange_BusinessWeeks/no_end_date (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498752+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/no_end_date","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498755+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april","Output":"    --- PASS: TestRange_BusinessWeeks/first_week_of_april (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.49876+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/first_week_of_april","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498766+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april","Output":"    --- PASS: TestRange_BusinessWeeks/april (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498769+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/april","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498792+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march","Output":"    --- PASS: TestRange_BusinessWeeks/march (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498801+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/march","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498807+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week","Output":"    --- PASS: TestRange_BusinessWeeks/one_day_of_the_week (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498866+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks/one_day_of_the_week","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498872+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestRange_BusinessWeeks","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498876+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate","Output":"--- PASS: TestQuotaGenerator_Generate (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.49888+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Output":"    --- PASS: TestQuotaGenerator_Generate/april_with_no_holidays (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498884+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/april_with_no_holidays","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498887+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays","Output":"    --- PASS: TestQuotaGenerator_Generate/september_with_7_holidays (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498892+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/september_with_7_holidays","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498896+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays","Output":"    --- PASS: TestQuotaGenerator_Generate/december_with_6_holidays (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498901+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_6_holidays","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498904+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays","Output":"    --- PASS: TestQuotaGenerator_Generate/december_with_no_holidays (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.498959+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate/december_with_no_holidays","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.498966+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuotaGenerator_Generate","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.49897+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"    quota_test.go:256: \n"}
+{"Time":"2024-12-26T13:58:59.498974+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \tError Trace:\t/Users/john/Projects/foo/bar/internal/quotation/domain/quota_test.go:256\n"}
+{"Time":"2024-12-26T13:58:59.49899+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \tError:      \tNot equal: \n"}
+{"Time":"2024-12-26T13:58:59.498999+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \texpected: []domain.QuotaRow{domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:8}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:32}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:8}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:40}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:16.3}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:t"}
+{"Time":"2024-12-26T13:58:59.49902+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"ime.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:20}}\n"}
+{"Time":"2024-12-26T13:58:59.499027+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \tactual  : []domain.QuotaRow{domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:8}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:32}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:8}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:40}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:16.3}, domain.QuotaRow{Title:\"\", Range:domain.Range{Start:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), End:t"}
+{"Time":"2024-12-26T13:58:59.499034+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"ime.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC)}, Hours:23}}\n"}
+{"Time":"2024-12-26T13:58:59.499038+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t\n"}
+{"Time":"2024-12-26T13:58:59.499042+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \tDiff:\n"}
+{"Time":"2024-12-26T13:58:59.499045+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t--- Expected\n"}
+{"Time":"2024-12-26T13:58:59.499063+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t+++ Actual\n"}
+{"Time":"2024-12-26T13:58:59.499068+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t@@ -95,3 +95,3 @@\n"}
+{"Time":"2024-12-26T13:58:59.499071+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t   },\n"}
+{"Time":"2024-12-26T13:58:59.499076+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t-  Hours: (float64) 20\n"}
+{"Time":"2024-12-26T13:58:59.499079+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t+  Hours: (float64) 23\n"}
+{"Time":"2024-12-26T13:58:59.499085+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \t            \t  }\n"}
+{"Time":"2024-12-26T13:58:59.499088+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"        \tTest:       \tTestQuota_AddHours/add_hours_less_than_a_day\n"}
+{"Time":"2024-12-26T13:58:59.499108+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours","Output":"--- FAIL: TestQuota_AddHours (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.499116+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day","Output":"    --- PASS: TestQuota_AddHours/subtract_hours_less_than_a_day (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.499129+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/subtract_hours_less_than_a_day","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.499133+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day","Output":"    --- PASS: TestQuota_AddHours/add_hours_more_than_a_day (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.499141+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_more_than_a_day","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.499144+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays","Output":"    --- PASS: TestQuota_AddHours/6_holidays (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.499148+02:00","Action":"pass","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/6_holidays","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.499151+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Output":"    --- FAIL: TestQuota_AddHours/add_hours_less_than_a_day (0.00s)\n"}
+{"Time":"2024-12-26T13:58:59.499171+02:00","Action":"fail","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours/add_hours_less_than_a_day","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.499174+02:00","Action":"fail","Package":"github.com/foo/bar/internal/quotation/domain","Test":"TestQuota_AddHours","Elapsed":0}
+{"Time":"2024-12-26T13:58:59.499176+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Output":"FAIL\n"}
+{"Time":"2024-12-26T13:58:59.499887+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Output":"FAIL\tgithub.com/foo/bar/internal/quotation/domain\t0.206s\n"}
+{"Time":"2024-12-26T13:58:59.499894+02:00","Action":"fail","Package":"github.com/foo/bar/internal/quotation/domain","Elapsed":0.206}
