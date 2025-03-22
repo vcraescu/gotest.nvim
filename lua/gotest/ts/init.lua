@@ -82,7 +82,7 @@ function M.get_func_names(bufnr)
   local out = {}
 
   for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
-    if query.captures[id] == "func_name" then
+    if query.captures[id] == "func_name" and node then
       table.insert(out, vim.treesitter.get_node_text(node, 0))
     end
   end
@@ -152,17 +152,22 @@ function M.get_tbl_testcase_name(bufnr)
   for _, match, _ in query:iter_matches(root, bufnr, 0, -1) do
     local tc_name = nil
 
-    for id, node in pairs(match) do
+    for id, nodes in pairs(match) do
       local name = query.captures[id]
-
-      if name == "test.name" then
-        tc_name = vim.treesitter.get_node_text(node, bufnr)
+      if type(nodes) ~= "table" then
+        nodes = { nodes }
       end
 
-      if name == "test.block" then
-        local start_row, _, end_row, _ = node:range()
-        if curr_row >= start_row and curr_row <= end_row then
-          return tc_name
+      for _, node in ipairs(nodes) do
+        if name == "test.name" then
+          tc_name = vim.treesitter.get_node_text(node, bufnr)
+        end
+
+        if name == "test.block" then
+          local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
+          if curr_row >= start_row and curr_row <= end_row then
+            return tc_name
+          end
         end
       end
     end
@@ -187,13 +192,15 @@ function M.get_sub_testcase_name(bufnr)
 
   for id, node in query:iter_captures(root, bufnr, 0, -1) do
     local name = query.captures[id]
-    -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
-    if name == "tc.run" then
-      local start_row, _, end_row, _ = node:range()
 
-      is_inside_test = curr_row >= start_row and curr_row <= end_row
-    elseif name == "tc.name" and is_inside_test then
-      return vim.treesitter.get_node_text(node, bufnr)
+    if node then
+      if name == "tc.run" then
+        local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
+
+        is_inside_test = curr_row >= start_row and curr_row <= end_row
+      elseif name == "tc.name" and is_inside_test then
+        return vim.treesitter.get_node_text(node, bufnr)
+      end
     end
   end
 
