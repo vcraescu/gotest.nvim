@@ -5,7 +5,7 @@
 --- @field _ns number
 local M = {}
 
-local FAILED_HL = "Error"
+local FAILED_HL = "DiagnosticError"
 local PASSED_HL = "DiagnosticHint"
 local IGNORED_HL = "Ignore"
 local SKIPPED_HL = "DiagnosticWarn"

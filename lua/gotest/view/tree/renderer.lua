@@ -78,7 +78,7 @@ end
 --- @param node gotest.tree.Node
 --- @return string
 function M:_get_node_prefix(node)
-  return M._repeat_str(self.opts.indent, node.level - 1)
+  return string.rep(self.opts.indent, node.level - 1)
 end
 
 --- @private
@@ -152,18 +152,6 @@ end
 --- @return boolean
 function M:_is_expanded(node)
   return node.expanded or false
-end
-
---- @private
---- @param str string
---- @param count number
-function M._repeat_str(str, count)
-  local out = ""
-  for _ = 1, count do
-    out = out .. str
-  end
-
-  return out
 end
 
 return M

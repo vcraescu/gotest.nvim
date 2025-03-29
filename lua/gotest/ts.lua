@@ -50,7 +50,9 @@ end
 function M.get_current_test_func_name(bufnr)
   assert(bufnr and bufnr >= 0, "bufnr must be a valid buffer number")
 
-  local node = vim.treesitter.get_node()
+  vim.treesitter.get_parser(bufnr):parse()
+
+  local node = vim.treesitter.get_node({ bufnr = bufnr })
   if not node then
     return
   end

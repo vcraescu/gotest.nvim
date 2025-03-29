@@ -134,7 +134,12 @@ function M:parse_results()
   local results = {}
 
   for i, line in ipairs(self._lines) do
-    results[i] = { Output = line }
+    decoded_lines, _ = json_decode_lines({ line })
+    if decoded_lines then
+      results[i] = decoded_lines[0]
+    else
+      results[i] = { Output = line }
+    end
   end
 
   return results
@@ -154,7 +159,6 @@ end
 --- @field tests? gotest.GoTestNode[]
 
 --- @return gotest.GoTestNode[]?
---- @return string? error
 function M:parse()
   if self._tests then
     return self._tests
