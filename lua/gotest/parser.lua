@@ -7,10 +7,12 @@ local M = {}
 --- @field PASS string
 --- @field SKIP string
 --- @field FAIL string
+--- @field BUILD_FAIL string
 local GoTestResultAction = {
   PASS = "pass",
   SKIP = "skip",
   FAIL = "fail",
+  BUILD_FAIL = "build-fail",
 }
 
 --- @class gotest.GoTestResult

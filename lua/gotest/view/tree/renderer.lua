@@ -2,16 +2,10 @@
 --- @field opts gotest.Config.view.tree.renderer
 local M = {}
 
---- @class gotest.tree.Renderer.highlight
---- @field group string
---- @field line number
---- @field col_start? number
---- @field col_end? number
-
 --- @class gotest.tree.Renderer.row
---- @field node_id string
+--- @field node_id? string
 --- @field text string
---- @field highlight gotest.tree.Renderer.highlight
+--- @field highlight gotest.win.highlight
 
 --- @param opts? gotest.Config.view.tree.renderer
 function M.new(opts)
@@ -19,7 +13,7 @@ function M.new(opts)
 end
 
 --- @param nodes gotest.tree.Node[]
---- @return gotest.tree.Renderer.row
+--- @return gotest.tree.Renderer.row[]
 function M:render(nodes)
   if not nodes then
     return {}
@@ -89,7 +83,7 @@ end
 
 --- @private
 --- @param node gotest.tree.Node
---- @return gotest.tree.Renderer.row
+--- @return gotest.tree.Renderer.row[]
 function M:_render_node_text(node)
   if not node.text then
     return {}
@@ -98,22 +92,27 @@ function M:_render_node_text(node)
   local prefix = self:_get_node_prefix(node)
   prefix = prefix .. prefix
 
-  local out = {}
+  --- @type gotest.tree.Renderer.row[]
+  local rows = {}
 
   for _, line in ipairs(node.text) do
     local text = self:_get_text(line)
 
-    table.insert(out, {
+    --- @type gotest.tree.Renderer.row
+    local row = {
+      -- node_id = node.id,
       text = prefix .. text,
-      highlight = line.hl and {
-        group = line.hl,
-        col_start = #prefix,
-        col_end = #prefix + #text,
+      highlight = {
+        higroup = line.higroup,
+        start = { 0, #prefix },
+        finish = { 0, -1 },
       },
-    })
+    }
+
+    table.insert(rows, row)
   end
 
-  return out
+  return rows
 end
 
 --- @private
@@ -123,15 +122,18 @@ function M:_render_node_name(node)
   local prefix = self:_get_node_prefix(node) .. self:_get_node_icon(node)
   local text = self:_get_text(node.name)
 
-  return {
+  --- @type gotest.tree.Renderer.row
+  local row = {
     node_id = node.id,
     text = prefix .. text,
-    highlight = node.name.hl and {
-      group = node.name.hl,
-      col_start = #prefix,
-      col_end = #prefix + #text,
+    highlight = {
+      higroup = node.name.higroup,
+      start = { 0, #prefix },
+      finish = { 0, -1 },
     },
   }
+
+  return row
 end
 
 --- @private

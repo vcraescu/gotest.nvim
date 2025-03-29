@@ -52,7 +52,7 @@ function M:test_nearest(bufnr)
     end
 
     local parser = Parser.new(lines)
-    local results = parser:parse_results()
+    -- local results = parser:parse_results()
 
     -- return self._view:show_results(cmd, results, failed)
     local tests = parser:parse()

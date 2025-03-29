@@ -2,37 +2,31 @@
 --- @field opts gotest.Config.view.tree
 --- @field _nodes gotest.tree.Node[]
 --- @field _nodes_list table<number, gotest.tree.Node>
---- @field _ns number
---- @field _buf number
---- @field _win number
+--- @field _win gotest.Win
 --- @field _renderer gotest.tree.Renderer
 --- @field _output gotest.tree.Renderer.row[]
+--- @field _mounted_at integer
 
 --- @class gotest.tree.Node
---- @field name string|gotest.tree.Label
+--- @field name gotest.tree.Label
 --- @field children? gotest.tree.Node[]
 --- @field expanded? boolean
---- @field level number
+--- @field level? number
 --- @field text string[]|gotest.tree.Label[]
---- @field id number
+--- @field id? string
 
 --- @class gotest.tree.Label
 --- @field value string
---- @field hl? string
+--- @field higroup? string
 
 local M = {}
 
-math.randomseed(os.time())
-
-local function generate_id()
-  ---@diagnostic disable-next-line: undefined-field
-  return tostring(vim.loop.hrtime()) .. tostring(math.random(100000, 999999999))
-end
-
+--- @param mounted_at integer
 --- @param nodes gotest.tree.Node[]
---- @param win number
+--- @param win gotest.Win
 --- @param opts? gotest.Config.view.tree
-function M.new(nodes, win, opts)
+--- @return gotest.tree.View
+function M.new(mounted_at, nodes, win, opts)
   opts = opts or {}
   local _nodes = M._init_nodes(nodes, 1)
 
@@ -40,30 +34,28 @@ function M.new(nodes, win, opts)
     opts = opts,
     _nodes = _nodes,
     _nodes_list = M._init_nodes_list(_nodes),
-    _ns = vim.api.nvim_create_namespace(""),
-    _buf = vim.api.nvim_win_get_buf(win),
     _win = win,
     _output = {},
+    _mounted_at = mounted_at,
     _renderer = require("gotest.view.tree.renderer").new(opts.renderer),
-    _mounted_at = 0,
   }, { __index = M })
 end
 
-function M:open()
-  self._mounted_at = vim.api.nvim_buf_line_count(self._buf) - 1
-
+function M:render()
   self:_setup_keymaps()
   self:_render()
 end
 
 function M:toggle_current_node()
-  local cursor = vim.api.nvim_win_get_cursor(self._win)
-  local line = self._output[cursor[1] - self._mounted_at]
+  local line_no, col_no = self._win:get_cursor()
+  local line = self._output[line_no - self._mounted_at]
   if not line or not line.node_id then
     return nil
   end
 
-  return self:toggle_node(self._nodes_list[line.node_id])
+  self:toggle_node(self._nodes_list[line.node_id])
+
+  self._win:set_cursor(line_no, col_no)
 end
 
 function M:toggle_node(node)
@@ -80,42 +72,36 @@ end
 function M:_render()
   self._output = self._renderer:render(self._nodes)
 
-  vim.api.nvim_buf_clear_namespace(self._buf, self._ns, 0, -1)
+  --- @type string[]
+  local lines = {}
 
-  local lines, highlights = {}, {}
+  --- @type gotest.win.highlight[]
+  local highlights = {}
 
-  for i, line in ipairs(self._output) do
-    table.insert(lines, line.text)
+  for i, row in ipairs(self._output) do
+    table.insert(lines, row.text)
 
-    if line.highlight then
-      table.insert(highlights, {
-        group = line.highlight.group,
-        line = self._mounted_at + i - 1,
-        col_start = line.highlight.col_start or 0,
-        col_end = line.highlight.col_end or -1,
-      })
+    if row.highlight then
+      row.highlight.start[1] = i - 1 + self._mounted_at
+      row.highlight.finish[1] = i - 1 + self._mounted_at
+
+      table.insert(highlights, row.highlight)
     end
   end
 
-  vim.api.nvim_set_option_value("modifiable", true, { buf = self._buf })
-  vim.api.nvim_buf_set_lines(self._buf, self._mounted_at, -1, false, lines)
-  vim.api.nvim_set_option_value("modifiable", false, { buf = self._buf })
-
-  for _, hl in ipairs(highlights) do
-    vim.hl.range(self._buf, self._ns, hl.group, { hl.line, hl.col_start or 0 }, { hl.line, hl.col_end or -1 })
-  end
+  self._win:set_text(lines, self._mounted_at)
+  self._win:set_highlights(highlights)
 end
 
 --- @private
 function M:_setup_keymaps()
-  local opts = { noremap = true, silent = true, buffer = self._buf }
+  self._win:set_keymap("<CR>", function()
+    self:toggle_current_node()
+  end)
 
-  vim.keymap.set("n", "<CR>", function()
+  self._win:set_keymap("o", function()
     self:toggle_current_node()
-  end, opts)
-  vim.keymap.set("n", "o", function()
-    self:toggle_current_node()
-  end, opts)
+  end)
 end
 
 --- @private
@@ -153,7 +139,7 @@ function M._init_nodes(nodes, level)
     table.insert(
       out,
       vim.tbl_deep_extend("force", node, {
-        id = "id-" .. generate_id(),
+        id = "id-" .. require("gotest.unique_id")(),
         children = M._init_nodes(node.children, level + 1),
         level = level,
       })
