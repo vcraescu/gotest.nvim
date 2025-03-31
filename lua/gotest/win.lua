@@ -170,6 +170,9 @@ function M:_create_win()
     height = self.opts.height,
   })
   vim.wo[self._win].winfixheight = true
+  vim.api.nvim_win_call(self._win, function()
+    vim.cmd.wincmd("J")
+  end)
 end
 
 --- @private
