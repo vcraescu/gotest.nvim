@@ -115,6 +115,7 @@ function M.get_current_table_test_name(bufnr)
 
   local query = vim.treesitter.query.parse("go", query_table_test_name)
   local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  local utils = require("nvim-treesitter.ts_utils")
 
   for _, match, _ in query:iter_matches(root, bufnr, 0, -1) do
     local tc_name = nil
@@ -133,7 +134,7 @@ function M.get_current_table_test_name(bufnr)
           end
 
           if name == "test.block" then
-            local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
+            local start_row, _, end_row, _ = utils.get_vim_range({ vim.treesitter.get_node_range(node) })
             if curr_row >= start_row and curr_row <= end_row then
               return tc_name
             end
@@ -159,13 +160,14 @@ function M.get_current_sub_test_name(bufnr)
   local query = vim.treesitter.query.parse("go", query_sub_test_name)
   local is_inside_test = false
   local curr_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  local utils = require("nvim-treesitter.ts_utils")
 
   for id, node in query:iter_captures(root, bufnr, 0, -1) do
     local name = query.captures[id]
 
     -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
     if name == "tc.run" then
-      local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
+      local start_row, _, end_row, _ = utils.get_vim_range({ vim.treesitter.get_node_range(node) })
 
       is_inside_test = curr_row >= start_row and curr_row <= end_row
     elseif name == "tc.name" and is_inside_test then

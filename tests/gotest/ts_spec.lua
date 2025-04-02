@@ -74,7 +74,7 @@ describe("ts", function()
 
     it("should return nil if not on sub test case", function()
       local bufnr = utils.load_buf_fixture("/ts/sum_test.go", "go")
-      vim.api.nvim_win_set_cursor(0, { 44, 5 })
+      vim.api.nvim_win_set_cursor(0, { 45, 5 })
       local actual = ts.get_current_sub_test_name(bufnr)
 
       assert.is.Nil(actual)
