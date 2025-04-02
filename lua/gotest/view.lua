@@ -144,7 +144,7 @@ function M._to_tree_nodes(tests)
       --- @type gotest.tree.Node
       local node = {
         name = { value = test.name, higroup = higroup },
-        expanded = (test.failed or (test.output and vim.fn.empty(test.output) == 0)) and true,
+        expanded = true,
         text = test.output,
       }
 
