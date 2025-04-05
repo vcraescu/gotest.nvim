@@ -1,0 +1,5 @@
+# github.com/foo/bar/internal/quotation/domain_test [github.com/foo/bar/internal/quotation/domain.test]
+internal/quotation/domain/quota_test.go:23:2: undefined: ddd
+{"Time":"2024-12-31T08:42:28.837941+02:00","Action":"start","Package":"github.com/foo/bar/internal/quotation/domain"}
+{"Time":"2024-12-31T08:42:28.838003+02:00","Action":"output","Package":"github.com/foo/bar/internal/quotation/domain","Output":"FAIL\tgithub.com/foo/bar/internal/quotation/domain [build failed]\n"}
+{"Time":"2024-12-31T08:42:28.838035+02:00","Action":"fail","Package":"github.com/foo/bar/internal/quotation/domain","Elapsed":0}
