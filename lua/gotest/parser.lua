@@ -33,7 +33,7 @@ local function json_decode_lines(lines)
   for _, line in ipairs(lines) do
     local ok, decoded = pcall(vim.fn.json_decode, line)
     if not ok then
-      return decoded
+      return nil
     end
 
     table.insert(out, decoded)
@@ -132,11 +132,11 @@ function M:parse_results()
   --- @type gotest.GoTestResult[]?
   self._results = json_decode_lines(self._lines)
 
-  if not self._results then
+  if not self._results or #self._results == 0 then
     self._results = {}
 
     for i, line in ipairs(self._lines) do
-      local decoded_line, _ = json_decode_lines({ line })
+      local decoded_line = json_decode_lines({ line })
       if decoded_line then
         self._results[i] = decoded_line[0]
       else
