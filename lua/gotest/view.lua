@@ -42,10 +42,8 @@ function M:show_tests(cmd, tests, failed)
   local nodes = M._to_tree_nodes(tests)
   assert(nodes, "no tests found")
 
-  local mounted_at = (#lines > 0 and #lines - 1) or 0
-
   --- @type gotest.tree.View
-  local view = require("gotest.view.tree.view").new(mounted_at, nodes, self._win, self.opts.tree)
+  local view = require("gotest.view.tree.view").new(#lines, nodes, self._win, self.opts.tree)
 
   view:render()
   self:_try_focus(failed)

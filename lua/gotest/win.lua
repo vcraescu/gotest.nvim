@@ -188,7 +188,7 @@ function M:_set_buf_lines(lines, start)
   local buf_lines = {}
 
   for _, line in ipairs(lines) do
-    vim.list_extend(buf_lines, vim.fn.split(line, "\n"))
+    vim.list_extend(buf_lines, vim.fn.split(line, "\n", true))
   end
 
   vim.api.nvim_set_option_value("modifiable", true, { buf = self._buf })
