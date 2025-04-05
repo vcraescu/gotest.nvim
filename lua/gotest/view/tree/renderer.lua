@@ -1,5 +1,5 @@
 --- @class gotest.tree.Renderer
---- @field opts gotest.Config.view.tree.renderer
+--- @field opts gotest.Config.view.tree
 local M = {}
 
 --- @class gotest.tree.Renderer.row
@@ -7,7 +7,7 @@ local M = {}
 --- @field text string
 --- @field highlight gotest.win.highlight
 
---- @param opts? gotest.Config.view.tree.renderer
+--- @param opts? gotest.Config.view.tree
 function M.new(opts)
   return setmetatable({ opts = opts }, { __index = M })
 end

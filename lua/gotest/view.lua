@@ -25,7 +25,7 @@ end
 --- @param cmd string[]
 --- @param tests gotest.GoTestNode[]
 --- @param failed boolean
-function M:show_tests(cmd, tests, failed)
+function M:render_tree(cmd, tests, failed)
   local lines = self:_get_tests_output(tests)
 
   self._win:set_title(cmd)
@@ -52,25 +52,39 @@ end
 --- @param cmd string[]
 --- @param results gotest.GoTestResult[]
 --- @param failed boolean
-function M:show_results(cmd, results, failed)
+function M:render_raw(cmd, results, failed)
   local lines = {}
-  local build_failed = false
+
+  --- @type gotest.win.highlight[]
+  local highlights = {}
 
   for _, result in ipairs(results) do
-    if result.Action == "build-fail" then
-      build_failed = true
-    end
+    local line = result.Output
 
-    table.insert(lines, result.Output)
+    if line then
+      table.insert(lines, line)
+
+      line = vim.fn.trim(line, " ")
+
+      local higroup
+
+      if vim.startswith(line, "=== PAUSE") or vim.startswith(line, "=== CONT") then
+        higroup = IGNORED_HL
+      elseif vim.startswith(line, "--- PASS") or vim.startswith(line, "PASS") then
+        higroup = PASSED_HL
+      elseif vim.startswith(line, "--- FAIL") or vim.startswith(line, "FAIL") then
+        higroup = FAILED_HL
+      end
+
+      if higroup then
+        table.insert(highlights, { higroup = higroup, start = { #lines - 1, 0 }, finish = { #lines - 1, -1 } })
+      end
+    end
   end
 
   self._win:set_title(cmd)
   self._win:set_text(lines)
-
-  if build_failed then
-    self._win:set_highlights({ higroup = FAILED_HL, start = { 0, -1 }, finish = { #lines, -1 } })
-  end
-
+  self._win:set_highlights(highlights)
   self._win:scroll(-1)
 
   self:_try_focus(failed)
@@ -99,12 +113,12 @@ function M:_get_tests_output(tests)
 end
 
 function M:_try_focus(failed)
-  vim.schedule(function()
-    if (failed and self.opts.focus.fail) or (not failed and self.opts.focus.success) then
-      self._win:focus()
+  if (failed and not self.opts.focus_on_fail) or (not failed and not self.opts.focus_on_success) then
+    return
+  end
 
-      return
-    end
+  vim.schedule(function()
+    self._win:focus()
   end)
 end
 

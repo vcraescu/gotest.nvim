@@ -7,7 +7,7 @@ function M.setup(opts)
   opts = Config.setup(opts)
   local api = Api.new(opts)
 
-  vim.api.nvim_create_user_command("GoTestNearest", function()
+  vim.api.nvim_create_user_command("GoTestNearest", function(args)
     local timer = vim.uv.new_timer()
     assert(timer, "Failed to create uv timer")
 
@@ -21,7 +21,7 @@ function M.setup(opts)
         coroutine.resume(co)
       end)
     end)
-  end, { force = true, desc = "Run the nearest go test" })
+  end, { force = true, desc = "Run the nearest go test", nargs = "*" })
 end
 
 return M

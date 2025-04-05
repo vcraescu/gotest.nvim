@@ -41,24 +41,41 @@ function M:test_nearest(bufnr)
   local cmd = Cli.build_gotest_cmd("./" .. file_path, test_names, subtest_name)
 
   Notify.info("Tests running...")
+  Diagnostics.clear(bufnr)
 
   Cli.exec_cmd({ cmd = cmd }, function(lines, exit_code)
     local failed = exit_code ~= 0
 
     if failed then
       Notify.error("Tests FAILED")
+
+      if not self.opts.view.show_on_fail then
+        return
+      end
     else
       Notify.success("Tests PASSED")
+
+      if not self.opts.view.show_on_success then
+        return
+      end
     end
 
     local parser = Parser.new(lines)
-    -- local results = parser:parse_results()
+    local results = parser:parse_results()
+    assert(results, "Failed to parse results")
 
-    -- return self._view:show_results(cmd, results, failed)
-    local tests = parser:parse()
-    if tests then
-      return self._view:show_tests(cmd, tests, failed)
+    if self.opts.diagnostics and self.opts.diagnostics.enabled then
+      Diagnostics.show(bufnr, results)
     end
+
+    if self.opts.view.type == "tree" then
+      local tests = parser:parse()
+      assert(tests, "Failed to parse tests")
+
+      return self._view:render_tree(cmd, tests, failed)
+    end
+
+    return self._view:render_raw(cmd, results, failed)
   end)
 end
 

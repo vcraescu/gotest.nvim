@@ -1,6 +1,7 @@
 --- @class gotest.Parser
 --- @field _tests gotest.GoTestNode[]?
 --- @field _lines string[]?
+--- @field _results gotest.GoTestResult[]
 local M = {}
 
 --- @class gotest.GoTestResult.Action
@@ -23,7 +24,6 @@ local GoTestResultAction = {
 
 --- @param lines string[]
 --- @return gotest.GoTestResult[]?
---- @return string? error
 local function json_decode_lines(lines)
   assert(lines, "Expected non-nil lines")
 
@@ -33,13 +33,13 @@ local function json_decode_lines(lines)
   for _, line in ipairs(lines) do
     local ok, decoded = pcall(vim.fn.json_decode, line)
     if not ok then
-      return nil, decoded
+      return decoded
     end
 
     table.insert(out, decoded)
   end
 
-  return out, nil
+  return out
 end
 
 --- @param tests table
@@ -125,24 +125,33 @@ end
 
 --- @return gotest.GoTestResult[]
 function M:parse_results()
-  local decoded_lines, _ = json_decode_lines(self._lines)
-  if decoded_lines then
-    return decoded_lines
+  if self._results then
+    return self._results
   end
 
-  --- @type gotest.GoTestResult[]
-  local results = {}
+  --- @type gotest.GoTestResult[]?
+  self._results = json_decode_lines(self._lines)
 
-  for i, line in ipairs(self._lines) do
-    decoded_lines, _ = json_decode_lines({ line })
-    if decoded_lines then
-      results[i] = decoded_lines[0]
-    else
-      results[i] = { Output = line }
+  if not self._results then
+    self._results = {}
+
+    for i, line in ipairs(self._lines) do
+      local decoded_line, _ = json_decode_lines({ line })
+      if decoded_line then
+        self._results[i] = decoded_line[0]
+      else
+        self._results[i] = { Output = line }
+      end
     end
   end
 
-  return results
+  for i, result in ipairs(self._results) do
+    if result.Output then
+      self._results[i].Output = vim.fn.trim(result.Output, "\n", 2)
+    end
+  end
+
+  return self._results
 end
 
 --- @class gotest.GoTestNode

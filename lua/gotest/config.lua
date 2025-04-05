@@ -1,29 +1,21 @@
 local M = {}
 
----@class gotest.Config.view.focus
----@field fail boolean
----@field success boolean
-
----@class gotest.Config.view.show
----@field fail boolean
----@field success boolean
-
----@class gotest.Config.view.tree.renderer.icons
+---@class gotest.Config.view.tree.icons
 ---@field closed string
 ---@field opened string
 
----@class gotest.Config.view.tree.renderer
----@field indent string
----@field icons gotest.Config.view.tree.renderer.icons
-
 ---@class gotest.Config.view.tree
----@field renderer gotest.Config.view.tree.renderer
+---@field indent string
+---@field icons gotest.Config.view.tree.icons
 
 ---@class gotest.Config.view
----@field focus gotest.Config.view.focus
+---@field focus_on_fail boolean
+---@field focus_on_success boolean
+---@field show_on_fail boolean
+---@field show_on_success boolean
 ---@field height number
----@field show gotest.Config.view.show
 ---@field tree gotest.Config.view.tree
+---@field type '"tree"' | '"raw"'
 
 ---@class gotest.Config.diagnostics
 ---@field enabled boolean
@@ -35,23 +27,17 @@ local M = {}
 ---@field diagnostics gotest.Config.diagnostics
 local defaults = {
   view = {
-    focus = {
-      fail = true,
-      success = false,
-    },
+    type = "tree",
     height = 15,
-    show = {
-      fail = true,
-      success = true,
-    },
+    focus_on_fail = true,
+    focus_on_success = false,
+    show_on_fail = true,
+    show_on_success = true,
     tree = {
-      renderer = {
-        indent = "  ",
-        icons = {
-          closed = " ",
-          opened = " ",
-          passed = "󰸞 ",
-        },
+      indent = "  ",
+      icons = {
+        closed = " ",
+        opened = " ",
       },
     },
   },

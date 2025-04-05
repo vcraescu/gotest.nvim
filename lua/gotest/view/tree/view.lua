@@ -37,7 +37,7 @@ function M.new(mounted_at, nodes, win, opts)
     _win = win,
     _output = {},
     _mounted_at = mounted_at,
-    _renderer = require("gotest.view.tree.renderer").new(opts.renderer),
+    _renderer = require("gotest.view.tree.renderer").new(opts),
   }, { __index = M })
 end
 
