@@ -7,7 +7,7 @@ local M = {}
 
 local FAILED_HL = "DiagnosticError"
 local PASSED_HL = "DiagnosticHint"
-local IGNORED_HL = "Ignore"
+local IGNORED_HL = "DiagnosticUnnecessary"
 local SKIPPED_HL = "DiagnosticWarn"
 
 --- @param opts? gotest.Config.view
