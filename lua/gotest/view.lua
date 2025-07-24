@@ -6,7 +6,7 @@
 local M = {}
 
 local FAILED_HL = "DiagnosticError"
-local PASSED_HL = "DiagnosticHint"
+local PASSED_HL = "DiagnosticOk"
 local IGNORED_HL = "DiagnosticUnnecessary"
 local SKIPPED_HL = "DiagnosticWarn"
 
