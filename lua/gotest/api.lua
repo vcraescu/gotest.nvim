@@ -1,71 +1,81 @@
 local Cli = require("gotest.cli")
-local Util = require("gotest.util")
 local Notify = require("gotest.notify")
-local Ts = require("gotest.ts")
-local Output = require("gotest.view.output")
+local TestFile = require("gotest.test_file")
+local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
+local Parser = require("gotest.parser")
 
 ---@class gotest.Api
 ---@field opts gotest.Config
----@field output gotest.Output
+---@field _view gotest.View
 local M = {}
-M.__index = M
 
 ---@param opts gotest.Config
 function M.new(opts)
-  local self = setmetatable({}, M)
+  local self = setmetatable({}, { __index = M })
 
   self.opts = opts or {}
-  self.output = Output.new(self.opts.output)
+  self._view = View.new(self.opts.view)
 
   return self
 end
 
 ---@param bufnr integer
 function M:test_nearest(bufnr)
-  if not Util.is_test_file() then
+  local file = TestFile.new(bufnr)
+
+  if not file:is_test() then
+    Notify.warn("Not a Go test file")
+
     return
   end
 
-  local func_names = Ts.get_nearest_func_names(bufnr)
-  if not func_names or #func_names == 0 then
-    return Notify.warn("No tests to run")
+  local test_names, subtest_name = file:get_current_test()
+  if not test_names then
+    Notify.warn("No tests found")
+
+    return
   end
 
-  local subtest_name = nil
-
-  if #func_names == 1 then
-    subtest_name = Ts.get_tbl_testcase_name(bufnr)
-
-    if not subtest_name then
-      subtest_name = Ts.get_sub_testcase_name(bufnr)
-    end
-  end
-
-  local cli = Cli.new({
-    module = Util.get_current_module_path(),
-    func_names = func_names,
-    subtest_name = subtest_name,
-  }, self.opts)
+  local file_path = file:get_dir()
+  local cmd = Cli.build_gotest_cmd("./" .. file_path, test_names, subtest_name)
 
   Notify.info("Tests running...")
-
   Diagnostics.clear(bufnr)
 
-  cli:exec(function(results, exit_code)
+  Cli.exec_cmd({ cmd = cmd }, function(lines, exit_code)
     local failed = exit_code ~= 0
-
-    if self.opts.diagnostics.enabled then
-      Diagnostics.show(bufnr, results)
-    end
 
     if failed then
       Notify.error("Tests FAILED")
+
+      if not self.opts.view.show_on_fail then
+        return
+      end
     else
-      Notify.info("Tests PASSED")
+      Notify.success("Tests PASSED")
+
+      if not self.opts.view.show_on_success then
+        return
+      end
     end
 
-    self.output:open(cli.cmd, results, failed)
+    local parser = Parser.new(lines)
+    local results = parser:parse_results()
+    assert(results, "Failed to parse results")
+
+    if self.opts.diagnostics and self.opts.diagnostics.enabled then
+      Diagnostics.show(bufnr, results)
+    end
+
+    if self.opts.view.type == "tree" then
+      local tests = parser:parse()
+      assert(tests, "Failed to parse tests")
+
+      return self._view:render_tree(cmd, tests, failed)
+    end
+
+    return self._view:render_raw(cmd, results, failed)
   end)
 end
 

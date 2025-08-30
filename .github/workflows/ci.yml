@@ -1,0 +1,31 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  unit_tests:
+    name: unit tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+        rev: [nightly, v0.10.0]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.rev }}
+
+       - name: Install
+        run: |
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/opt/plenary.nvim
+          git clone --depth 1 --branch main https://github.com/nvim-treesitter/nvim-treesitter ~/.local/share/nvim/site/pack/vendor/opt/nvim-treesitter
+
+      - name: Run tests
+        run: |
+          nvim --headless -u scripts/minimal_init.vim -i NONE -c "TSInstallSync go" -c "q"
+          make test

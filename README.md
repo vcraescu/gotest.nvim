@@ -5,11 +5,22 @@
 
 ## Install
 
+### Dependencies
+
+This plugin requires [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with the Go parser installed:
+
+```lua
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "go" },
+}
+```
+
 ### Lazy
 
 ```lua
 return {
   "vcraescu/gotest.nvim",
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
   cmd = "GoTestNearest",
   opts = {}
 }
