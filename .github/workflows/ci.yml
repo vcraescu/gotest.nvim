@@ -27,5 +27,5 @@ jobs:
 
       - name: Run tests
         run: |
-          nvim --headless -u scripts/minimal_init.vim -i NONE -c "TSInstallSync go" -c "q"
+          nvim --headless -u scripts/minimal_init.vim -i NONE -c "TSInstall go" -c "q"
           make test
