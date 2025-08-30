@@ -7,12 +7,10 @@
 
 ### Dependencies
 
-This plugin requires [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with the Go parser installed:
+This plugin requires [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/tree/main) with the Go parser installed:
 
 ```lua
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "go" },
-}
+require('nvim-treesitter').install({ "go" })
 ```
 
 ### Lazy
@@ -27,6 +25,7 @@ return {
 ```
 
 ## Default config
+
 ```lua
 {
   output = {
