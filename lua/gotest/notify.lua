@@ -3,7 +3,7 @@ local M = {}
 ---@param msg string
 function M.warn(msg)
   vim.schedule(function()
-    vim.api.nvim_echo({ { msg, "DiagnosticWarning" } }, true, {})
+    vim.api.nvim_echo({ { msg, "DiagnosticWarn" } }, true, {})
   end)
 end
 
