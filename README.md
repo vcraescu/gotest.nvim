@@ -19,7 +19,7 @@ require('nvim-treesitter').install({ "go" })
 return {
   "vcraescu/gotest.nvim",
   dependencies = { "nvim-treesitter/nvim-treesitter" },
-  cmd = "GoTestNearest",
+  cmd = { "GoTestNearest", "GoTestRetry" },
   opts = {}
 }
 ```
@@ -49,6 +49,14 @@ return {
 
 ## Commands
 
+Run the test nearest to the cursor:
+
 ```
 :GoTestNearest
+```
+
+Rerun the last test command:
+
+```
+:GoTestRetry
 ```
