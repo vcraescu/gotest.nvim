@@ -19,7 +19,7 @@ end
 ---@param msg string
 function M.success(msg)
   vim.schedule(function()
-    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticHint" } }, true, {})
+    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticOk" } }, true, {})
   end)
 end
 
