@@ -1,8 +1,8 @@
-local Config = require("gotest.config")
 local Ts = require("gotest.ts")
 
----@type gotest.Diagnostics
 local M = {}
+
+local ns = vim.api.nvim_create_namespace("gotest")
 
 ---@param bufnr integer
 ---@param results gotest.GoTestResult[]
@@ -28,14 +28,14 @@ function M.show(bufnr, results)
     end
   end
 
-  vim.diagnostic.set(Config._ns, bufnr, diagnostics, {})
+  vim.diagnostic.set(ns, bufnr, diagnostics, {})
 end
 
 ---@param bufnr integer
 function M.clear(bufnr)
   bufnr = bufnr or 0
 
-  vim.diagnostic.set(Config._ns, bufnr, {}, {})
+  vim.diagnostic.set(ns, bufnr, {}, {})
 end
 
 return M

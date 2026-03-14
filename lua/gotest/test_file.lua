@@ -1,9 +1,6 @@
 local Ts = require("gotest.ts")
 
----@type gotest.TestFile
-local M = {
-  bufnr = nil,
-}
+local M = {}
 
 ---@param bufnr number
 ---@return gotest.TestFile

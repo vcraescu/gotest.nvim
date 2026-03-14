@@ -1,3 +1,5 @@
 {
-  "diagnostics.disable": ["duplicate-doc-field"]
+    "diagnostics.disable": [
+        "duplicate-doc-field"
+    ]
 }

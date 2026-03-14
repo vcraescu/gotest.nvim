@@ -1,33 +1,33 @@
 local M = {}
 
-local msg_prefix = "[gotest] "
+local PREFIX = "[gotest] "
+
+---@param msg string
+---@param hl string
+local function echo(msg, hl)
+  vim.schedule(function()
+    vim.api.nvim_echo({ { PREFIX .. msg, hl } }, true, {})
+  end)
+end
 
 ---@param msg string
 function M.warn(msg)
-  vim.schedule(function()
-    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticWarn" } }, true, {})
-  end)
+  echo(msg, "DiagnosticWarn")
 end
 
 ---@param msg string
 function M.error(msg)
-  vim.schedule(function()
-    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticError" } }, true, {})
-  end)
+  echo(msg, "DiagnosticError")
 end
 
 ---@param msg string
 function M.success(msg)
-  vim.schedule(function()
-    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticOk" } }, true, {})
-  end)
+  echo(msg, "DiagnosticOk")
 end
 
 ---@param msg string
 function M.info(msg)
-  vim.schedule(function()
-    vim.api.nvim_echo({ { msg_prefix .. msg, "DiagnosticInfo" } }, true, {})
-  end)
+  echo(msg, "DiagnosticInfo")
 end
 
 return M

@@ -23,8 +23,6 @@ function M.setup(opts)
   opts = opts or {}
   options = vim.tbl_deep_extend("force", defaults, opts)
 
-  options["_ns"] = vim.api.nvim_create_namespace("gotest")
-
   return options
 end
 
