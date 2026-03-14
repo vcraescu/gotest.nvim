@@ -27,5 +27,5 @@ jobs:
 
       - name: Run tests
         run: |
-          nvim --headless -u scripts/minimal_init.lua -i NONE -c "lua require('nvim-treesitter').install({'go'})" -c "q"
+          nvim --headless -u scripts/minimal_init.lua -i NONE -c "lua require('nvim-treesitter.install').install({'go'}, true)" -c "q"
           make test
