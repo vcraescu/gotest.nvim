@@ -30,7 +30,19 @@
 --- @field Test? string
 --- @field Output string
 
+---@class gotest.GoTestStats
+---@field total number
+---@field passed number
+---@field failed number
+---@field skipped number
+
 ---@class gotest.Diagnostics
+
+---@class gotest.Highlights
+---@field FAILED string
+---@field PASSED string
+---@field SKIPPED string
+---@field IGNORED string
 
 ---@class gotest.Cli.opts
 ---@field cached? boolean
@@ -44,8 +56,8 @@
 ---@field bufnr number?
 
 --- @class gotest.View
---- @field opts? gotest.Config.view
---- @field _win? gotest.Win
+--- @field opts gotest.Config.view
+--- @field _win gotest.Win
 
 --- @class gotest.win.highlight
 --- @field higroup string

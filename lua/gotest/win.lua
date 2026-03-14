@@ -1,3 +1,5 @@
+local Highlights = require("gotest.highlights")
+
 local M = {}
 
 --- @type gotest.win.Config
@@ -34,15 +36,32 @@ function M.new(opts)
 end
 
 --- @param title string|string[]
-function M:set_title(title)
+--- @param stats? gotest.GoTestStats
+function M:set_title(title, stats)
   self:_create_win()
 
   if type(title) == "string" then
     title = { title }
   end
 
-  title = vim.fn.join(title, " ")
-  vim.api.nvim_set_option_value("winbar", title, { win = self._win })
+  local left = vim.fn.join(title, " ")
+  local winbar = left
+
+  if stats and stats.total > 0 then
+    local report = string.format(
+      "%%#%s#%d/%d passed%%*  %%#%s#%d failed%%*  %%#%s#%d skipped%%* ",
+      Highlights.PASSED,
+      stats.passed,
+      stats.total,
+      Highlights.FAILED,
+      stats.failed,
+      Highlights.SKIPPED,
+      stats.skipped
+    )
+    winbar = left .. "%=" .. report
+  end
+
+  vim.api.nvim_set_option_value("winbar", winbar, { win = self._win })
 end
 
 --- @param text string|string[]
