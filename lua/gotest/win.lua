@@ -99,8 +99,6 @@ function M:get_cursor()
 end
 
 function M:set_keymap(key, method)
-  self:_create_win()
-
   vim.keymap.set("n", key, function()
     method()
   end, { buffer = self._buf, noremap = true, silent = true })
