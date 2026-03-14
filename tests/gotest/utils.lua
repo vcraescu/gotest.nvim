@@ -17,21 +17,6 @@ function M.load_buf_fixture(filename, filetype)
 end
 
 function M.setup_test()
-  vim.cmd("packadd plenary.nvim")
-  vim.cmd("packadd nvim-treesitter")
-
-  require("nvim-treesitter.install").update({ with_sync = true })
-  require("nvim-treesitter.install").ensure_installed("go") -- Ensure 'go' parser is installed
-  require("nvim-treesitter.configs").setup({
-    ensure_installed = { "go" },
-    highlight = { enable = true },
-    auto_install = true,
-  })
-
-  local ok, parsers = pcall(require, "nvim-treesitter.parsers")
-  if not ok or not parsers.has_parser("go") then
-    print("Go treesitter parser is not installed")
-  end
 end
 
 return M

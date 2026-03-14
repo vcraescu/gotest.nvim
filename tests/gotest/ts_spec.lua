@@ -99,4 +99,12 @@ describe("ts", function()
       assert.is.Nil(actual)
     end)
   end)
+
+  describe("get_test_func_names", function()
+    local bufnr = utils.load_buf_fixture("/ts/sum_test.go", "go")
+    vim.api.nvim_win_set_cursor(0, { 19, 5 })
+    local actual = ts.get_test_func_names(bufnr)
+
+    assert.is.same({ "TestSum", "TestSum2" }, actual)
+  end)
 end)

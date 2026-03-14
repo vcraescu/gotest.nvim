@@ -2,6 +2,10 @@ package cli
 
 import "testing"
 
+func TestMain(m *testing.M) {
+	m.Run()
+}
+
 func TestSum(t *testing.T) {
 	type args struct {
 		a int

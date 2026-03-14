@@ -51,3 +51,7 @@ func TestSum2(t *testing.T) {
 		}
 	})
 }
+
+func TestMain(m *testing.M) {
+	m.Run()
+}

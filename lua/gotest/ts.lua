@@ -134,8 +134,8 @@ function M.get_current_table_test_name(bufnr)
 
           if name == "test.block" then
             local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
-            start_row = start_row + 1  -- Convert to 1-based indexing
-            end_row = end_row + 1      -- Convert to 1-based indexing
+            start_row = start_row + 1 -- Convert to 1-based indexing
+            end_row = end_row + 1 -- Convert to 1-based indexing
             if curr_row >= start_row and curr_row <= end_row then
               return tc_name
             end
@@ -168,8 +168,8 @@ function M.get_current_sub_test_name(bufnr)
     -- tc_run is the first capture of a match, so we can use it to check if we are inside a test
     if name == "tc.run" then
       local start_row, _, end_row, _ = vim.treesitter.get_node_range(node)
-      start_row = start_row + 1  -- Convert to 1-based indexing
-      end_row = end_row + 1      -- Convert to 1-based indexing
+      start_row = start_row + 1 -- Convert to 1-based indexing
+      end_row = end_row + 1 -- Convert to 1-based indexing
 
       is_inside_test = curr_row >= start_row and curr_row <= end_row
     elseif name == "tc.name" and is_inside_test then
@@ -196,7 +196,7 @@ function M.get_test_func_names(bufnr)
   for id, node, _ in query:iter_captures(root, bufnr, 0, -1) do
     if node and query.captures[id] == "func_name" then
       local func_name = vim.treesitter.get_node_text(node, 0)
-      if vim.startswith(func_name, "Test") then
+      if func_name ~= "TestMain" and vim.startswith(func_name, "Test") then
         table.insert(output, vim.treesitter.get_node_text(node, 0))
       end
     end
