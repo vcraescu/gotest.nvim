@@ -57,8 +57,7 @@ function M.get_current_test_func_name(bufnr)
 
   parser:parse()
 
-  local cursor = vim.api.nvim_win_get_cursor(0)
-  local node = vim.treesitter.get_node({ bufnr = bufnr, pos = { cursor[1] - 1, cursor[2] } })
+  local node = vim.treesitter.get_node({ bufnr = bufnr })
   if not node then
     return
   end
