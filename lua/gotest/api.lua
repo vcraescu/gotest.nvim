@@ -74,8 +74,7 @@ function M:_run_tests(bufnr, cmd)
       end
     end
 
-    local parser = Parser.new(lines)
-    local results = parser:parse_results()
+    local results = Parser.parse_results(lines)
     assert(results, "Failed to parse results")
 
     if self.opts.diagnostics and self.opts.diagnostics.enabled then

@@ -21,28 +21,19 @@ local function decode_lines(lines)
 end
 
 ---@param lines string[]
----@return gotest.Parser
-function M.new(lines)
+---@return gotest.GoTestResult[]
+function M.parse_results(lines)
   assert(lines, "Expected non-nil lines")
 
-  return setmetatable({ _lines = lines }, { __index = M })
-end
+  local results = decode_lines(lines) or {}
 
----@return gotest.GoTestResult[]
-function M:parse_results()
-  if self._results then
-    return self._results
-  end
-
-  self._results = decode_lines(self._lines) or {}
-
-  for _, result in ipairs(self._results) do
+  for _, result in ipairs(results) do
     if result.Output then
       result.Output = vim.fn.trim(result.Output, "\n", 2)
     end
   end
 
-  return self._results
+  return results
 end
 
 return M
