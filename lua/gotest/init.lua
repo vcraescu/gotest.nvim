@@ -2,7 +2,7 @@ local Config = require("gotest.config")
 local Api = require("gotest.api")
 local M = {}
 
----@param opts? gotest.Config
+--- @param opts? gotest.Config
 function M.setup(opts)
   opts = Config.setup(opts)
   local api = Api.new(opts)

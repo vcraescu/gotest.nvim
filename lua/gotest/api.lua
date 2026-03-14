@@ -5,14 +5,6 @@ local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
 local Parser = require("gotest.parser")
 
----@class gotest.TestRun
----
-
----@class gotest.Api
----@field opts gotest.Config
----@field _view gotest.View
----@field _cmd string[]
----@field _bufnr integer
 local M = {}
 
 ---@param opts gotest.Config
@@ -88,13 +80,6 @@ function M:_run_tests(bufnr, cmd)
 
     if self.opts.diagnostics and self.opts.diagnostics.enabled then
       Diagnostics.show(bufnr, results)
-    end
-
-    if self.opts.view.type == "tree" then
-      local tests = parser:parse()
-      assert(tests, "Failed to parse tests")
-
-      return self._view:render_tree(self._cmd, tests, failed)
     end
 
     return self._view:render_raw(self._cmd, results, failed)

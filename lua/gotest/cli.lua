@@ -1,9 +1,5 @@
 local M = {}
 
----@class gotest.Cli.opts
----@field cached? boolean
----@field timeout? number
-
 ---@param path string?
 ---@param test_names string[]?
 ---@param subtest_name string?
@@ -66,10 +62,6 @@ function M.build_gotest_cmd(path, test_names, subtest_name, opts)
 
   return output
 end
-
----@class gotest.Cli.command
----@field cmd string[]
----@field cwd? string
 
 ---@param cmd gotest.Cli.command
 ---@param callback fun(output: string[], exit_code: integer)

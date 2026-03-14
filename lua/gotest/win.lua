@@ -1,21 +1,6 @@
---- @class gotest.win.highlight
---- @field higroup string
---- @field start number[]
---- @field finish number[]
-
---- @class gotest.Win
---- @field opts gotest.win.Config
---- @field _buf number
---- @field _win number
---- @field _ns number
---- @field _title string
---- @field _text string[]
---- @field _highlights gotest.win.highlight[]
 local M = {}
 
---- @class gotest.win.Config
---- @field height? number
---- @field keys? table<string, string>
+--- @type gotest.win.Config
 local defaults = {
   height = 15,
   keys = {

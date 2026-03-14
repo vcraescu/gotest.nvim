@@ -1,7 +1,7 @@
 local Config = require("gotest.config")
 local Ts = require("gotest.ts")
 
----@class gotest.Diagnostics
+---@type gotest.Diagnostics
 local M = {}
 
 ---@param bufnr integer

@@ -63,10 +63,7 @@ lua/gotest/
   win.lua           # Reusable split window + buffer abstraction
   unique_id.lua     # ID generator (hrtime + random)
   view/
-    view.lua        # High-level view: render_tree() / render_raw()
-    tree/
-      view.lua      # Interactive tree component with expand/collapse
-      renderer.lua  # GoTestNode[] -> text rows + highlights
+    view.lua        # High-level view: render_raw()
 
 tests/gotest/
   cli_spec.lua      # CLI command building and exec tests
@@ -126,9 +123,6 @@ functions to avoid circular dependencies:
 ```lua
 -- top-level (eager)
 local Cli = require("gotest.cli")
-
--- inline (deferred, avoids circular deps)
-local renderer = require("gotest.view.tree.renderer").new(opts)
 ```
 
 ### Type Annotations
