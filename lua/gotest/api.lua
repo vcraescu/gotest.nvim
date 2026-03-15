@@ -51,6 +51,10 @@ function M:test_retry()
   self:_run_tests(self._bufnr, self._cmd)
 end
 
+function M:deactivate()
+  self._view:destroy()
+end
+
 ---@param bufnr integer
 ---@param cmd string[]
 function M:_run_tests(bufnr, cmd)

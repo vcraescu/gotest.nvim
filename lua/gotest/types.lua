@@ -57,6 +57,9 @@ local M = {}
 
 ---@class gotest.TestFile
 ---@field bufnr number?
+---@field is_test fun() -> boolean
+---@field get_current_test fun() -> string[]?, string?
+---@field get_dir fun() -> string?
 
 ---@class gotest.View
 ---@field opts gotest.Config.view
