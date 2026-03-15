@@ -5,6 +5,7 @@ local View = require("gotest.view")
 local Diagnostics = require("gotest.diagnostics")
 local Parser = require("gotest.parser")
 
+---@class gotest.Api
 local M = {}
 
 ---@param opts gotest.Config

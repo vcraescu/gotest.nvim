@@ -1,8 +1,6 @@
 local Ts = require("gotest.ts")
-
-local M = {}
-
 local ns = vim.api.nvim_create_namespace("gotest")
+local M = {}
 
 ---@param bufnr integer
 ---@param results gotest.GoTestResult[]

@@ -1,5 +1,6 @@
 local Highlights = require("gotest.highlights")
 
+--- @class gotest.Win
 local M = {}
 
 --- @type gotest.win.Config

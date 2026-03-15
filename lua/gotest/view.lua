@@ -1,5 +1,6 @@
 local Highlights = require("gotest.highlights")
 
+--- @class gotest.View
 local M = {}
 
 --- @param opts? gotest.Config.view

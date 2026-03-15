@@ -25,12 +25,7 @@ function M.build_gotest_cmd(path, test_names, subtest_name, opts)
 
   assert(path or test_names and #test_names == 1, "Expected non-nil path or test_names")
 
-  local output = {
-    "go",
-    "test",
-    "-v",
-    "-json",
-  }
+  local output = { "go", "test", "-v", "-json" }
 
   if not opts.cached then
     table.insert(output, "-count=1")
