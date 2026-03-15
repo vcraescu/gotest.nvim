@@ -45,6 +45,7 @@ local M = {}
 ---@field PASSED string
 ---@field SKIPPED string
 ---@field IGNORED string
+---@field TITLE string
 
 ---@class gotest.Cli.opts
 ---@field cached? boolean

@@ -45,7 +45,7 @@ function M:set_title(title, stats)
   end
 
   local left = vim.fn.join(title, " ")
-  local winbar = left
+  local winbar = string.format("%%#%s#%s%%*", Highlights.TITLE, left)
 
   if stats and stats.total > 0 then
     local report = string.format(
@@ -58,7 +58,8 @@ function M:set_title(title, stats)
       Highlights.SKIPPED,
       stats.skipped
     )
-    winbar = left .. "%=" .. report
+
+    winbar = winbar .. "%=" .. report
   end
 
   vim.api.nvim_set_option_value("winbar", winbar, { win = self._win })
