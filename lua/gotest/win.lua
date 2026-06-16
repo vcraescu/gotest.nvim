@@ -110,7 +110,7 @@ end
 function M:set_highlights(highlights)
   self:_create_win()
 
-  if #highlights == 0 then
+  if highlights.start ~= nil then
     highlights = { highlights }
   end
 
