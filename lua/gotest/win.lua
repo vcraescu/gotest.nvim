@@ -13,6 +13,7 @@ local defaults = {
   },
   keys = {
     q = "close",
+    ["<Esc>"] = "close",
   },
 }
 
@@ -36,6 +37,7 @@ function M.new(opts)
 
   if opts.on_toggle then
     opts.keys.q = opts.on_toggle
+    opts.keys["<Esc>"] = opts.on_toggle
   end
 
   return setmetatable({

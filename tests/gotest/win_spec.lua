@@ -82,6 +82,32 @@ describe("win", function()
     assert.is.falsy(win:is_open())
   end)
 
+  it("should close the window when Esc is pressed", function()
+    local win = new_win({ type = "float" })
+    win:set_text("output")
+
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "x", false)
+    vim.wait(100)
+
+    assert.is.falsy(win:is_open())
+  end)
+
+  it("should run the toggle callback when Esc is pressed", function()
+    local toggled = false
+    local win = new_win({
+      type = "float",
+      on_toggle = function()
+        toggled = true
+      end,
+    })
+    win:set_text("output")
+
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "x", false)
+    vim.wait(100)
+
+    assert.is.equal(true, toggled)
+  end)
+
   it("should center a float with the default sizes", function()
     local layout = vim.fn.winlayout()
     local win = new_win({ type = "float" })

@@ -130,10 +130,10 @@ The float opens focused. By default, the border comes from the `'winborder'` opt
 it. You can use any `nvim_open_win` border value, for example `"single"`, `"double"`, `"solid"`, `"shadow"`, or
 `"none"`. You can also set a table of border characters.
 
-Press `q` to close the output window. The `q` key runs the same function as `:GoTestToggle`. This key works in splits
-and floats. The key is buffer-local, so it does not override your global mappings. Closing the window returns focus to
-the previous window. Use `:GoTestToggle` to open the window again later. If no test ran yet, the command shows a warning
-message.
+Press `q`, `Esc`, or `Ctrl+[` to close the output window. Each key runs the same function as `:GoTestToggle`. These keys
+work in splits and floats. The keys are buffer-local, so they do not override your global mappings. Closing the window
+returns focus to the previous window. Use `:GoTestToggle` to open the window again later. If no test ran yet, the
+command shows a warning message.
 
 ## How Test Detection Works
 
