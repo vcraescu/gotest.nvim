@@ -1,7 +1,7 @@
 # gotest.nvim
 
 [![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
-[![Neovim](https://img.shields.io/badge/Neovim%200.11+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
+[![Neovim](https://img.shields.io/badge/Neovim%200.12.5+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 [![Tests](https://github.com/vcraescu/gotest.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/vcraescu/gotest.nvim/actions/workflows/ci.yml)
 
 A Neovim plugin for running Go tests from within the editor. Uses Tree-sitter to intelligently detect the test at the

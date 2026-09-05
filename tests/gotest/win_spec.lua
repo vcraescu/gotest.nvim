@@ -31,6 +31,7 @@ describe("win", function()
     vim.o.columns = 100
     vim.o.lines = 40
     vim.o.cmdheight = 1
+    vim.o.winborder = "rounded"
   end)
 
   after_each(function()

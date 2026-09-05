@@ -6,8 +6,15 @@ utils.setup_test()
 
 describe("view", function()
   local view
+  local original_winborder
+
+  before_each(function()
+    original_winborder = vim.o.winborder
+    vim.o.winborder = "rounded"
+  end)
 
   after_each(function()
+    vim.o.winborder = original_winborder
     if view then
       local buf = view._win._buf
       view:destroy()
