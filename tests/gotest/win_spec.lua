@@ -70,6 +70,18 @@ describe("win", function()
     assert.are.same(8, vim.api.nvim_win_get_height(win._win))
   end)
 
+  it("should report whether the window is open", function()
+    local win = new_win({ type = "float" })
+
+    assert.is.falsy(win:is_open())
+
+    win:set_text("output")
+    assert.is.truthy(win:is_open())
+
+    win:close()
+    assert.is.falsy(win:is_open())
+  end)
+
   it("should center a float with the default sizes", function()
     local layout = vim.fn.winlayout()
     local win = new_win({ type = "float" })

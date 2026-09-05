@@ -13,7 +13,9 @@ function M.new(opts)
   local self = setmetatable({}, { __index = M })
 
   self.opts = opts or {}
-  self._view = View.new(self.opts.view)
+  self._view = View.new(self.opts.view, function()
+    self:toggle()
+  end)
 
   return self
 end
@@ -52,6 +54,23 @@ function M:test_retry()
   self:_run_tests(self._bufnr, self._cmd)
 end
 
+function M:toggle()
+  if self._view:is_open() then
+    self._view:hide()
+
+    return
+  end
+
+  if not self._results then
+    Notify.warn("No previous test run found")
+
+    return
+  end
+
+  self._view:render_raw(self._cmd, self._results, self._failed)
+  self._view:focus()
+end
+
 function M:deactivate()
   self._view:destroy()
 end
@@ -67,23 +86,21 @@ function M:_run_tests(bufnr, cmd)
 
     if failed then
       Notify.error("Tests FAILED")
-
-      if not self.opts.view.show_on_fail then
-        return
-      end
     else
       Notify.success("Tests PASSED")
-
-      if not self.opts.view.show_on_success then
-        return
-      end
     end
 
     local results = Parser.parse_results(lines)
     assert(results, "Failed to parse results")
+    self._results = results
+    self._failed = failed
 
     if self.opts.diagnostics and self.opts.diagnostics.enabled then
       Diagnostics.show(bufnr, results)
+    end
+
+    if (failed and not self.opts.view.show_on_fail) or (not failed and not self.opts.view.show_on_success) then
+      return
     end
 
     return self._view:render_raw(self._cmd, results, failed)

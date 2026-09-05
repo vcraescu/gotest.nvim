@@ -20,6 +20,12 @@ function M.setup(opts)
       M._api:test_retry()
     end)
   end, { force = true, desc = "Retry previous go tests", nargs = "*" })
+
+  vim.api.nvim_create_user_command("GoTestToggle", function()
+    vim.schedule(function()
+      M._api:toggle()
+    end)
+  end, { force = true, desc = "Toggle the last test run window", nargs = "*" })
 end
 
 function M.deactivate()

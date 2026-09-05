@@ -108,12 +108,15 @@ local M = {}
 ---@field type? "split"|"float"
 ---@field height? number
 ---@field float? gotest.win.FloatConfig
----@field keys? table<string, string>
+---@field keys? table<string, string|fun()> Key to Win method or callback
+---@field on_toggle? fun()
 
 ---@class gotest.Api
 ---@field opts gotest.Config
 ---@field _view gotest.View
 ---@field _cmd string[]
 ---@field _bufnr integer
+---@field _results gotest.GoTestResult[]?
+---@field _failed boolean?
 
 return M

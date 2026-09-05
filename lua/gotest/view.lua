@@ -5,13 +5,14 @@ local Win = require("gotest.win")
 local M = {}
 
 --- @param opts? gotest.Config.view
+--- @param on_toggle? fun()
 --- @return gotest.View
-function M.new(opts)
+function M.new(opts, on_toggle)
   opts = opts or {}
 
   return setmetatable({
     opts = opts,
-    _win = Win.new({ type = opts.type, height = opts.height, float = opts.float }),
+    _win = Win.new({ type = opts.type, height = opts.height, float = opts.float, on_toggle = on_toggle }),
   }, { __index = M })
 end
 
@@ -110,6 +111,15 @@ end
 
 function M:hide()
   self._win:close()
+end
+
+--- @return boolean
+function M:is_open()
+  return self._win:is_open()
+end
+
+function M:focus()
+  self._win:focus()
 end
 
 function M:destroy()

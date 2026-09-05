@@ -34,6 +34,10 @@ function M.new(opts)
   opts = vim.tbl_deep_extend("force", defaults, opts or {})
   assert(opts.type == "split" or opts.type == "float", "Window type must be split or float")
 
+  if opts.on_toggle then
+    opts.keys.q = opts.on_toggle
+  end
+
   return setmetatable({
     opts = opts,
     _buf = create_buf(),
@@ -139,6 +143,11 @@ function M:close()
   self:_close_win()
 end
 
+--- @return boolean
+function M:is_open()
+  return self:_win_exists()
+end
+
 function M:destroy()
   self:close()
   self._buf = nil
@@ -187,9 +196,13 @@ function M:_create_win()
     return
   end
 
-  for key, method in pairs(self.opts.keys) do
+  for key, action in pairs(self.opts.keys) do
     vim.keymap.set("n", key, function()
-      self[method](self)
+      if type(action) == "function" then
+        action()
+      else
+        self[action](self)
+      end
     end, { buffer = self._buf, noremap = true })
   end
 

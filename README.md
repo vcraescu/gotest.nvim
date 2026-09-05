@@ -19,6 +19,7 @@ cursor, runs `go test -v -json` asynchronously, and renders results in a split o
 - Reuse the split or floating window across test runs
 - Winbar shows the exact `go test` command that was run
 - `:GoTestRetry` to re-run the last test without moving the cursor
+- `:GoTestToggle` to show or hide the last test output
 
 ## Requirements
 
@@ -46,14 +47,16 @@ The plugin registers no keymaps globally. Map the commands yourself:
 ```lua
 vim.keymap.set("n", "<leader>tt", "<cmd>GoTestNearest<CR>", { desc = "Go: run nearest test" })
 vim.keymap.set("n", "<leader>tr", "<cmd>GoTestRetry<CR>",   { desc = "Go: retry last test" })
+vim.keymap.set("n", "<leader>tv", "<cmd>GoTestToggle<CR>",  { desc = "Go: toggle last test output" })
 ```
 
 ## Commands
 
-| Command          | Description                           |
-| ---------------- | ------------------------------------- |
-| `:GoTestNearest` | Run the Go test nearest to the cursor |
-| `:GoTestRetry`   | Re-run the last executed test command |
+| Command          | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `:GoTestNearest` | Run the Go test nearest to the cursor        |
+| `:GoTestRetry`   | Re-run the last executed test command        |
+| `:GoTestToggle`  | Show or hide the last test run output window |
 
 ## Configuration
 
@@ -127,8 +130,10 @@ The float opens focused. By default, the border comes from the `'winborder'` opt
 it. You can use any `nvim_open_win` border value, for example `"single"`, `"double"`, `"solid"`, `"shadow"`, or
 `"none"`. You can also set a table of border characters.
 
-Press `q` to close the output window. This key works in splits and floats. The key is buffer-local, so it does not
-override your global mappings. Closing the window returns focus to the previous window.
+Press `q` to close the output window. The `q` key runs the same function as `:GoTestToggle`. This key works in splits
+and floats. The key is buffer-local, so it does not override your global mappings. Closing the window returns focus to
+the previous window. Use `:GoTestToggle` to open the window again later. If no test ran yet, the command shows a warning
+message.
 
 ## How Test Detection Works
 
