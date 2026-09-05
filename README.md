@@ -13,7 +13,7 @@ cursor, runs `go test -v -json` asynchronously, and renders results in a split o
   - Table-driven subtests (`{ name: "foo", ... }` struct entries)
   - `t.Run("name", ...)` subtests
   - The enclosing `Test*` function
-  - All tests in the file when the cursor is outside any test function
+  - The whole file when the cursor is outside any test function
 - Runs `go test -v -json` asynchronously — editor stays responsive
 - `vim.diagnostic` markers on failed test function definitions
 - Reuse the split or floating window across test runs
@@ -142,9 +142,11 @@ message.
 1. **Table-driven subtest** — cursor inside a `{ name: "my case", ... }` struct literal entry
 2. **`t.Run` subtest** — cursor inside a `t.Run("my case", func(t *testing.T) { ... })` block
 3. **Enclosing `Test*` function** — cursor anywhere inside a `func TestFoo(t *testing.T)` body
-4. **All tests in the file** — cursor is outside any test function
+4. **The whole file** — cursor is outside any test function; the command has no `-run` flag and runs every test in the
+   file
 
-The resulting `-run` flag uses `\Q...\E` POSIX quoting for exact name matching, with subtests separated by `/`.
+When a test is selected, the resulting `-run` flag uses `\Q...\E` POSIX quoting for exact name matching, with subtests
+separated by `/`.
 
 ## Diagnostics
 

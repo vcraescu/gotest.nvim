@@ -30,13 +30,13 @@ function M:test_nearest(bufnr)
     return
   end
 
-  local test_names, subtest_name = file:get_current_test()
-  if not test_names then
+  if not file:has_tests() then
     Notify.warn("No tests found")
 
     return
   end
 
+  local test_names, subtest_name = file:get_current_test()
   local file_path = file:get_dir()
   self._cmd = Cli.build_gotest_cmd("./" .. file_path, test_names, subtest_name)
   self._bufnr = bufnr

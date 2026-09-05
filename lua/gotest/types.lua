@@ -80,6 +80,7 @@ local M = {}
 ---@field is_test fun() -> boolean
 ---@field get_current_test fun() -> string[]?, string?
 ---@field get_dir fun() -> string?
+---@field has_tests fun() -> boolean
 
 ---@class gotest.View
 ---@field opts gotest.Config.view

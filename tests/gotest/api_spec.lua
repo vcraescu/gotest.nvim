@@ -85,4 +85,53 @@ describe("api", function()
 
     assert.is.falsy(api._view:is_open())
   end)
+
+  describe("test_nearest", function()
+    local run_spy
+
+    before_each(function()
+      run_spy = spy.on(Api, "_run_tests")
+    end)
+
+    after_each(function()
+      Api._run_tests:revert()
+    end)
+
+    it("should run only the nearest test when the cursor is inside a test function", function()
+      api = Api.new(Config.setup())
+      local bufnr = utils.load_buf_fixture("/ts/sum_test.go", "go")
+      vim.api.nvim_buf_set_name(bufnr, "tests/gotest/fixtures/ts/sum_test.go")
+      vim.api.nvim_win_set_cursor(0, { 10, 5 })
+
+      api:test_nearest(bufnr)
+
+      assert.spy(run_spy).was_called_with(bufnr, {
+        "go",
+        "test",
+        "-v",
+        "-json",
+        "-count=1",
+        "./tests/gotest/fixtures/ts",
+        [[-run=^\QTestSum\E$]],
+      })
+    end)
+
+    it("should run the whole file when the cursor is outside a test function", function()
+      api = Api.new(Config.setup())
+      local bufnr = utils.load_buf_fixture("/ts/sum_test.go", "go")
+      vim.api.nvim_buf_set_name(bufnr, "tests/gotest/fixtures/ts/sum_test.go")
+      vim.api.nvim_win_set_cursor(0, { 1, 1 })
+
+      api:test_nearest(bufnr)
+
+      assert.spy(run_spy).was_called_with(bufnr, {
+        "go",
+        "test",
+        "-v",
+        "-json",
+        "-count=1",
+        "./tests/gotest/fixtures/ts",
+      })
+    end)
+  end)
 end)

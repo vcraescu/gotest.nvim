@@ -16,17 +16,22 @@ function M:get_dir()
 end
 
 ---@return boolean
+function M:has_tests()
+  return Ts.get_test_func_names(self.bufnr) ~= nil
+end
+
+---@return boolean
 function M:is_test()
   local name = vim.api.nvim_buf_get_name(self.bufnr)
 
   return vim.endswith(name, "_test.go")
 end
 
----@return string[]?, string? test name and table test name or sub test name
+---@return string[]?, string? test names and table test name or sub test name, or nil when the cursor is outside a test function
 function M:get_current_test()
   local test_name = Ts.get_current_test_func_name(self.bufnr)
   if not test_name then
-    return Ts.get_test_func_names(self.bufnr)
+    return nil
   end
 
   local table_test_name = Ts.get_current_table_test_name(self.bufnr)
