@@ -199,15 +199,20 @@ function M:_create_win()
     local width = resolve_size(self.opts.float.width, columns)
     local height = resolve_size(self.opts.float.height, lines)
 
-    self._win = vim.api.nvim_open_win(self._buf, false, {
+    local config = {
       relative = "editor",
       width = width,
       height = height,
       row = math.floor((lines - height) / 2),
       col = math.floor((columns - width) / 2),
       style = "minimal",
-      border = "none",
-    })
+    }
+
+    if self.opts.float.border ~= nil then
+      config.border = self.opts.float.border
+    end
+
+    self._win = vim.api.nvim_open_win(self._buf, true, config)
     return
   end
 

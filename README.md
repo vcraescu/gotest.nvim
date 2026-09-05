@@ -67,6 +67,7 @@ require("gotest").setup({
     float = {
       width = 0.8,          -- Set the float width.
       height = 0.8,         -- Set the float height.
+      border = "rounded",   -- Optional. Overrides the 'winborder' option.
     },
     focus_on_fail = true,   -- focus the output pane on failure
     focus_on_success = false,
@@ -83,19 +84,20 @@ require("gotest").setup({
 
 ### Options
 
-| Option                  | Default   | Description                                                             |
-| ----------------------- | --------- | ----------------------------------------------------------------------- |
-| `view.type`             | `"split"` | Window type: `"split"` or `"float"`                                     |
-| `view.height`           | `15`      | Split height in rows                                                    |
-| `view.float.width`      | `0.8`     | Float width as a screen fraction or column count                        |
-| `view.float.height`     | `0.8`     | Float height as a screen fraction or row count                          |
-| `view.focus_on_fail`    | `true`    | Move cursor to the output pane when tests fail                          |
-| `view.focus_on_success` | `false`   | Move cursor to the output pane when tests pass                          |
-| `view.show_on_fail`     | `true`    | Open the output pane when tests fail                                    |
-| `view.show_on_success`  | `true`    | Open the output pane when tests pass                                    |
-| `timeout`               | `30`      | Test timeout passed to `go test -timeout`                               |
-| `disable_test_cache`    | `false`   | When `true`, always passes `-count=1` to bypass the Go test cache       |
-| `diagnostics.enabled`   | `true`    | Place `vim.diagnostic` warning markers on failed `Test*` function lines |
+| Option                  | Default       | Description                                                                                                                |
+| ----------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `view.type`             | `"split"`     | Window type: `"split"` or `"float"`                                                                                        |
+| `view.height`           | `15`          | Split height in rows                                                                                                       |
+| `view.float.width`      | `0.8`         | Float width as a screen fraction or column count                                                                           |
+| `view.float.height`     | `0.8`         | Float height as a screen fraction or row count                                                                             |
+| `view.float.border`     | `'winborder'` | Float border. Defaults to the 'winborder' option. Accepts any `nvim_open_win` border value or a table of border characters |
+| `view.focus_on_fail`    | `true`        | Move cursor to the output pane when tests fail                                                                             |
+| `view.focus_on_success` | `false`       | Move cursor to the output pane when tests pass                                                                             |
+| `view.show_on_fail`     | `true`        | Open the output pane when tests fail                                                                                       |
+| `view.show_on_success`  | `true`        | Open the output pane when tests pass                                                                                       |
+| `timeout`               | `30`          | Test timeout passed to `go test -timeout`                                                                                  |
+| `disable_test_cache`    | `false`       | When `true`, always passes `-count=1` to bypass the Go test cache                                                          |
+| `diagnostics.enabled`   | `true`        | Place `vim.diagnostic` warning markers on failed `Test*` function lines                                                    |
 
 ### Floating window
 
@@ -108,6 +110,7 @@ require("gotest").setup({
     float = {
       width = 0.8,
       height = 0.8,
+      border = "rounded", -- Optional. Overrides the 'winborder' option.
     },
   },
 })
@@ -119,6 +122,13 @@ of the visible Neovim screen. For example, `0.8` means 80%. The available height
 width of 100 columns and a height of 30 rows. You can use a fraction for one dimension and a row or column count for the
 other dimension. The plugin rounds sizes down to whole cells. The plugin limits each size to the available screen space,
 with a minimum of one cell. A one-row window does not show the winbar. `view.height` applies only to splits.
+
+The float opens focused. By default, the border comes from the `'winborder'` option. Set `view.float.border` to override
+it. You can use any `nvim_open_win` border value, for example `"single"`, `"double"`, `"solid"`, `"shadow"`, or
+`"none"`. You can also set a table of border characters.
+
+Press `q` to close the output window. This key works in splits and floats. The key is buffer-local, so it does not
+override your global mappings. Closing the window returns focus to the previous window.
 
 ## How Test Detection Works
 

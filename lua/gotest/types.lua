@@ -102,6 +102,7 @@ local M = {}
 ---@class gotest.win.FloatConfig
 ---@field width? number
 ---@field height? number
+---@field border? string|table
 
 ---@class gotest.win.Config
 ---@field type? "split"|"float"

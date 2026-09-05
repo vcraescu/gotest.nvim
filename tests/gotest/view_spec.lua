@@ -24,8 +24,10 @@ describe("view", function()
     assert.are.same("editor", config.relative)
     assert.are.same(40, config.width)
     assert.are.same(10, config.height)
+    assert.are.same({ "╭", "─", "╮", "│", "╯", "─", "╰", "│" }, config.border)
     assert.are.same({ "test output" }, vim.api.nvim_buf_get_lines(view._win._buf, 0, -1, false))
     assert.is.truthy(vim.wo[view._win._win].winbar:find("1/1 passed", 1, true))
+    assert.are.same(view._win._win, vim.api.nvim_get_current_win())
 
     local win_id = view._win._win
     view:hide()

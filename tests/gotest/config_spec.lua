@@ -27,4 +27,14 @@ describe("config", function()
     assert.is.truthy(opts.view.focus_on_fail)
     assert.are.same({ width = 0.8, height = 0.8 }, Config.setup().view.float)
   end)
+
+  it("should leave the float border unset by default", function()
+    assert.is.Nil(Config.setup().view.float.border)
+  end)
+
+  it("should keep a configured float border", function()
+    local opts = Config.setup({ view = { float = { border = "single" } } })
+
+    assert.are.same("single", opts.view.float.border)
+  end)
 end)

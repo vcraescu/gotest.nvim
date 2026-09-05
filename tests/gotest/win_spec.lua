@@ -3,6 +3,13 @@ local utils = require("tests.gotest.utils")
 
 utils.setup_test()
 
+--- @type table<string, string[]>
+local BORDER_CHARS = {
+  single = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+  double = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
+  rounded = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+}
+
 describe("win", function()
   local windows
   local original_options
@@ -15,7 +22,12 @@ describe("win", function()
 
   before_each(function()
     windows = {}
-    original_options = { columns = vim.o.columns, lines = vim.o.lines, cmdheight = vim.o.cmdheight }
+    original_options = {
+      columns = vim.o.columns,
+      lines = vim.o.lines,
+      cmdheight = vim.o.cmdheight,
+      winborder = vim.o.winborder,
+    }
     vim.o.columns = 100
     vim.o.lines = 40
     vim.o.cmdheight = 1
@@ -30,6 +42,7 @@ describe("win", function()
     vim.o.columns = original_options.columns
     vim.o.lines = original_options.lines
     vim.o.cmdheight = original_options.cmdheight
+    vim.o.winborder = original_options.winborder
   end)
 
   it("should open a bottom split by default", function()
@@ -58,7 +71,6 @@ describe("win", function()
   end)
 
   it("should center a float with the default sizes", function()
-    local current_win = vim.api.nvim_get_current_win()
     local layout = vim.fn.winlayout()
     local win = new_win({ type = "float" })
     win:set_text("output")
@@ -69,8 +81,38 @@ describe("win", function()
     assert.are.same(31, config.height)
     assert.are.same(10, config.col)
     assert.are.same(4, config.row)
-    assert.are.same(current_win, vim.api.nvim_get_current_win())
+    assert.are.same(BORDER_CHARS.rounded, config.border)
     assert.are.same(layout, vim.fn.winlayout())
+  end)
+
+  it("should focus the float when it opens", function()
+    local win = new_win({ type = "float" })
+    win:set_text("output")
+
+    assert.are.same(win._win, vim.api.nvim_get_current_win())
+  end)
+
+  it("should use the winborder option by default", function()
+    local win = new_win({ type = "float" })
+    win:set_text("output")
+
+    assert.are.same(BORDER_CHARS.rounded, vim.api.nvim_win_get_config(win._win).border)
+  end)
+
+  it("should follow the winborder option when it changes", function()
+    vim.o.winborder = "double"
+    local win = new_win({ type = "float" })
+    win:set_text("output")
+
+    assert.are.same(BORDER_CHARS.double, vim.api.nvim_win_get_config(win._win).border)
+  end)
+
+  it("should use the configured border over the winborder option", function()
+    vim.o.winborder = "single"
+    local win = new_win({ type = "float", float = { border = "double" } })
+    win:set_text("output")
+
+    assert.are.same(BORDER_CHARS.double, vim.api.nvim_win_get_config(win._win).border)
   end)
 
   it("should use columns and rows for absolute sizes", function()
