@@ -1,4 +1,5 @@
 local Highlights = require("gotest.highlights")
+local Win = require("gotest.win")
 
 --- @class gotest.View
 local M = {}
@@ -10,7 +11,7 @@ function M.new(opts)
 
   return setmetatable({
     opts = opts,
-    _win = require("gotest.win").new({ height = opts.height }),
+    _win = Win.new({ type = opts.type, height = opts.height, float = opts.float }),
   }, { __index = M })
 end
 

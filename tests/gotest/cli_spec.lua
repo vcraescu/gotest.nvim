@@ -146,12 +146,12 @@ describe("cli", function()
       }
 
       local job_id = cli.exec_cmd({ cmd = cmd }, function(actual, actual_exit_code)
-        assert.is.equals(1, actual_exit_code)
+        assert.is.equal(1, actual_exit_code)
         assert.is.same(expected[1], actual[2])
         assert.is.same(expected[2], actual[3])
       end)
 
-      _ = vim.fn.jobwait({ job_id })
+      vim.fn.jobwait({ job_id })
     end)
 
     it("should return the output", function()
@@ -272,20 +272,20 @@ describe("cli", function()
         ]
       ]])
       local job_id = cli.exec_cmd({ cmd = cmd, cwd = "./tests/gotest/fixtures/cli" }, function(actual, actual_exit_code)
-        assert.is.equals(1, actual_exit_code)
+        assert.is.equal(1, actual_exit_code)
         assert.is.truthy(#actual > 0)
 
         for index, actual_line in ipairs(actual) do
           local a = vim.fn.json_decode(actual_line)
           local e = expected[index]
 
-          assert.is.equals(e.Action, a.Action)
-          assert.is.equals(e.Package, a.Package)
-          assert.is.equals(e.Test, a.Test)
+          assert.is.equal(e.Action, a.Action)
+          assert.is.equal(e.Package, a.Package)
+          assert.is.equal(e.Test, a.Test)
         end
       end)
 
-      _ = vim.fn.jobwait({ job_id }, 1000)
+      vim.fn.jobwait({ job_id }, 1000)
     end)
   end)
 end)

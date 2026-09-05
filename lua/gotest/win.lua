@@ -5,7 +5,12 @@ local M = {}
 
 --- @type gotest.win.Config
 local defaults = {
+  type = "split",
   height = 15,
+  float = {
+    width = 0.8,
+    height = 0.8,
+  },
   keys = {
     q = "close",
   },
@@ -26,8 +31,11 @@ end
 --- @param opts? gotest.win.Config
 --- @return gotest.Win
 function M.new(opts)
+  opts = vim.tbl_deep_extend("force", defaults, opts or {})
+  assert(opts.type == "split" or opts.type == "float", "Window type must be split or float")
+
   return setmetatable({
-    opts = vim.tbl_extend("force", defaults, opts or {}),
+    opts = opts,
     _buf = create_buf(),
     _win = nil,
     _text = {},
@@ -40,6 +48,10 @@ end
 --- @param stats? gotest.GoTestStats
 function M:set_title(title, stats)
   self:_create_win()
+
+  if vim.api.nvim_win_get_height(self._win) < 2 then
+    return
+  end
 
   if type(title) == "string" then
     title = { title }
@@ -156,6 +168,19 @@ function M:scroll(offset)
   self:set_cursor(new_cursor, 0)
 end
 
+--- @param size number
+--- @param available number
+--- @return integer
+local function resolve_size(size, available)
+  assert(type(size) == "number" and size > 0 and size < math.huge, "Float size must be a positive finite number")
+
+  if size < 1 then
+    size = size * available
+  end
+
+  return math.max(1, math.min(math.floor(size), available))
+end
+
 --- @private
 function M:_create_win()
   if self:_win_exists() then
@@ -166,6 +191,24 @@ function M:_create_win()
     vim.keymap.set("n", key, function()
       self[method](self)
     end, { buffer = self._buf, noremap = true })
+  end
+
+  if self.opts.type == "float" then
+    local columns = vim.o.columns
+    local lines = math.max(1, vim.o.lines - vim.o.cmdheight)
+    local width = resolve_size(self.opts.float.width, columns)
+    local height = resolve_size(self.opts.float.height, lines)
+
+    self._win = vim.api.nvim_open_win(self._buf, false, {
+      relative = "editor",
+      width = width,
+      height = height,
+      row = math.floor((lines - height) / 2),
+      col = math.floor((columns - width) / 2),
+      style = "minimal",
+      border = "none",
+    })
+    return
   end
 
   self._win = vim.api.nvim_open_win(self._buf, false, {
@@ -209,7 +252,9 @@ end
 
 --- @private
 function M:_close_win()
-  _ = self:_win_exists() and vim.api.nvim_win_hide(self._win)
+  if self:_win_exists() then
+    vim.api.nvim_win_hide(self._win)
+  end
 end
 
 --- @private

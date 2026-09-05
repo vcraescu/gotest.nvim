@@ -1,6 +1,6 @@
 local M = {}
 
-local query_table_test_name = [[ 
+local query_table_test_name = [[
     (literal_value (
       literal_element (
         literal_value .(
@@ -17,7 +17,7 @@ local query_func_def_line_no = [[
       (#eq? @func_name "%s")
     )
   ]]
-local query_sub_test_name = [[ 
+local query_sub_test_name = [[
     (call_expression
       (selector_expression
         (field_identifier) @method.name)
@@ -25,7 +25,7 @@ local query_sub_test_name = [[
         (interpreted_string_literal (interpreted_string_literal_content) @tc.name)
         (func_literal) )
       (#eq? @method.name "Run")
-    ) @tc.run 
+    ) @tc.run
   ]]
 local query_func_name = [[(function_declaration name: (identifier) @func_name)]]
 

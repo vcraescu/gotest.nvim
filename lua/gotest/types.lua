@@ -1,6 +1,26 @@
 local M = {}
 
+---@class gotest.ViewOpts
+---@field type? "split"|"float"
+---@field float? gotest.win.FloatConfig
+---@field focus_on_fail? boolean
+---@field focus_on_success? boolean
+---@field show_on_fail? boolean
+---@field show_on_success? boolean
+---@field height? number
+
+---@class gotest.DiagnosticsOpts
+---@field enabled? boolean
+
+---@class gotest.ConfigOpts
+---@field view? gotest.ViewOpts
+---@field timeout? number
+---@field disable_test_cache? boolean
+---@field diagnostics? gotest.DiagnosticsOpts
+
 ---@class gotest.Config.view
+---@field type "split"|"float"
+---@field float gotest.win.FloatConfig
 ---@field focus_on_fail boolean
 ---@field focus_on_success boolean
 ---@field show_on_fail boolean
@@ -79,8 +99,14 @@ local M = {}
 ---@field _text string[]
 ---@field _highlights gotest.win.highlight[]
 
----@class gotest.win.Config
+---@class gotest.win.FloatConfig
+---@field width? number
 ---@field height? number
+
+---@class gotest.win.Config
+---@field type? "split"|"float"
+---@field height? number
+---@field float? gotest.win.FloatConfig
 ---@field keys? table<string, string>
 
 ---@class gotest.Api

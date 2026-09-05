@@ -4,10 +4,10 @@ local M = {
   _api = nil,
 }
 
---- @param opts? gotest.Config
+--- @param opts? gotest.ConfigOpts
 function M.setup(opts)
-  opts = Config.setup(opts)
-  M._api = Api.new(opts)
+  local config = Config.setup(opts)
+  M._api = Api.new(config)
 
   vim.api.nvim_create_user_command("GoTestNearest", function()
     vim.schedule(function()

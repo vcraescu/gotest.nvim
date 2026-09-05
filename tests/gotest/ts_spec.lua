@@ -10,7 +10,7 @@ describe("ts", function()
       vim.api.nvim_win_set_cursor(0, { 22, 5 })
       local actual = ts.get_current_test_func_name(bufnr)
 
-      assert.is.equals("TestSum", actual)
+      assert.is.equal("TestSum", actual)
     end)
 
     it("should return current function name if inside function", function()
@@ -18,7 +18,7 @@ describe("ts", function()
       vim.api.nvim_win_set_cursor(0, { 10, 5 })
       local actual = ts.get_current_test_func_name(bufnr)
 
-      assert.is.equals("TestSum", actual)
+      assert.is.equal("TestSum", actual)
     end)
 
     it("should return nil if outside function", function()
@@ -36,12 +36,12 @@ describe("ts", function()
       vim.api.nvim_win_set_cursor(0, { 19, 5 })
       local actual = ts.get_current_table_test_name(bufnr)
 
-      assert.is.equals("success", actual)
+      assert.is.equal("success", actual)
 
       vim.api.nvim_win_set_cursor(0, { 24, 5 })
       actual = ts.get_current_table_test_name(bufnr)
 
-      assert.is.equals("fail", actual)
+      assert.is.equal("fail", actual)
     end)
 
     it("should return nil if not on table test case", function()
@@ -64,12 +64,12 @@ describe("ts", function()
       vim.api.nvim_win_set_cursor(0, { 41, 5 })
       local actual = ts.get_current_sub_test_name(bufnr)
 
-      assert.is.equals("success", actual)
+      assert.is.equal("success", actual)
 
       vim.api.nvim_win_set_cursor(0, { 47, 5 })
       actual = ts.get_current_sub_test_name(bufnr)
 
-      assert.is.equals("fail", actual)
+      assert.is.equal("fail", actual)
     end)
 
     it("should return nil if not on sub test case", function()
@@ -86,10 +86,10 @@ describe("ts", function()
       local bufnr = utils.load_buf_fixture("/ts/sum_test.go", "go")
 
       local actual = ts.get_func_def_line_no(bufnr, "TestSum")
-      assert.is.equals(4, actual)
+      assert.is.equal(4, actual)
 
       actual = ts.get_func_def_line_no(bufnr, "TestSum2")
-      assert.is.equals(36, actual)
+      assert.is.equal(36, actual)
     end)
 
     it("should return nil if function is not found", function()
